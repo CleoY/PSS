@@ -219,6 +219,7 @@ public class Controller
                 pos = model.findTask(name);
                 if (pos != -1) {
                     Task myTask = model.getTaskList().get(pos);
+                    System.out.println("\n*** TASK INFO ***");
                     System.out.println("Name: " + myTask.getName());
                     System.out.println("Type: " + myTask.getType());
                     System.out.println("Start time: " + myTask.getStartTime());
@@ -285,7 +286,7 @@ public class Controller
                 break;
             }
             
-            System.out.print("Press any key to continue or E/e to exit... ");
+            System.out.print("\nPress any key to continue or E/e to exit... ");
             String option = scan.nextLine();
             if (!option.equals("E") && !option.equals("e")) {
                 displayMenu();
