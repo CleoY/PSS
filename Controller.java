@@ -187,9 +187,26 @@ public class Controller
                     System.out.println("Task name does not exists. Please try again.");
                 }
                 break;
+                    
             // Delete task
             case 3:
-                
+                System.out.println("Please enter the name of task: ");
+                name = scan.nextLine(); 
+                int pos2 = model.findTask(name);
+                //Will only delete if the task exists
+                if (pos2 != -1) {
+                    Boolean success = model.deleteTask(name);
+                    if(success == true)
+                    {
+                        System.out.println("The task was deleted sucessfully.");
+                    } else {
+                        System.out.println("Deleting this anti-task would leave conflicts between two or more tasks.");
+                    }
+                }
+                else {
+                    System.out.println("Task name does not exists. Please try again.");
+                }
+       
                 break;
             // Edit task
             case 4:
