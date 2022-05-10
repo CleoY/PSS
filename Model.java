@@ -58,7 +58,78 @@ public class Model
         return -1;
     }
     
-    public void deleteTask(String name) {
-        
+    public Boolean deleteTask(String name) {
+        //count for anti-task overlaps
+        int count = 0;
+
+        //get index of task
+        int pos2 = findTask(name);
+        Task myTask = listOfTask.get(pos2);
+
+        //Reccuring Task Delete
+        if (myTask instanceof RecurringTask) {
+            RecurringTask rTask = (RecurringTask)myTask;
+            //Find associated anti-tasks
+            //Loop through the array (get antitasks and compare time and dates)
+            for(int i = 0; i<listOfTask.size(); i++){
+                myTask = listOfTask.get(i);
+                if(myTask instanceof AntiTask){
+                    AntiTask findAnti = (AntiTask)myTask;
+
+                    //If the Start time and Date of Recurring and Anti task match 
+                    //Delete recurring and anti-task
+                    if(rTask.getStartTime() == findAnti.getStartTime() 
+                    && rTask.getStartDate() == findAnti.getDate()){
+                        listOfTask.remove(findAnti);
+                        listOfTask.remove(rTask);
+                        return true;
+                    }
+                    //There are no anti-tasks associated (Delete recurring)
+                } else {
+                    listOfTask.remove(rTask);
+                    return true;
+                }
+                }  
+            }
+        //Transient Task Delete
+        else if (myTask instanceof TransientTask) {
+            TransientTask tTask = (TransientTask)myTask;
+            listOfTask.remove(tTask);
+            return true;
+        }
+        //Anti Task delete
+        else {
+            AntiTask aTask = (AntiTask)myTask;
+            //check if there is more than 1 task with matching starttime and date
+            //return error
+            for(int i = 0; i<listOfTask.size(); i++){
+                myTask = listOfTask.get(i);
+                if(myTask instanceof TransientTask){
+                    TransientTask findTran = (TransientTask)myTask;
+                    if(aTask.getStartTime() == findTran.getStartTime() &&
+                    aTask.getDate() == findTran.getDate()){
+                        count++;
+                    }
+                }
+                if(myTask instanceof RecurringTask){
+                    RecurringTask findRec = (RecurringTask)myTask;
+                    if(aTask.getStartTime() == findRec.getStartTime() &&
+                    aTask.getDate() == findRec.getStartDate()){
+                        count++;
+                    }
+                } 
+            }
+            //Overlap Error
+            if(count > 1){
+               return false;
+
+            //No overlap
+            } else {
+                 //else
+                listOfTask.remove(aTask);
+                return true;
+            }
+        }
+        return true;
     }
 }
