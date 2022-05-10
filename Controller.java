@@ -143,48 +143,100 @@ public class Controller
                 
                 if (choice == 1) {
                     // Get start date
-                    // code here
-                    int startDate = 0;
+                    System.out.println("Please enter a start date in the format MMDDYYYY: ");
+                    int startDate = Integer.parseInt(scan.nextLine());
+                    // Need more check
+                    while (startDate < 0) {
+                        System.out.println("Invalid input. Please try again: ");
+                        startDate = Integer.parseInt(scan.nextLine());
+                    }
                     
                     
                     // Get end date
-                    // code here
-                    int endDate = 0;
-                    
+                    System.out.println("Please enter a start date in the format MMDDYYYY: ");
+                    int endDate = Integer.parseInt(scan.nextLine());
+                    while (endDate < startDate) {
+                        System.out.println("Invalid input: End date must be after start date. Please try again: ");
+                        endDate = Integer.parseInt(scan.nextLine());
+                    }
                     
                     // Get frequency
-                    // code here
-                    int frequency = 7;
-                    model.createRecurringTask(name, taskType, startTime, duration, startDate, endDate, frequency);
+                    System.out.println("Please enter a frequency (1-7): ");
+                    int frequency = Integer.parseInt(scan.nextLine());
+                    while (frequency < 1 || frequency > 7) {
+                        System.out.println("Invalid input: Frequency must be an integer between 1 and 7. Please try again: ");
+                        frequency = Integer.parseInt(scan.nextLine());
+                    }
+                    
+                    if (model.createRecurringTask(name, taskType, startTime, duration, startDate, endDate, frequency)) {
+                        System.out.println("Sucessfully created recurring task.");
+                    }
+                    else {
+                        System.out.println("Cannot create recurring task. Please check inputs and try again.");
+                    }
                 }
                 else if (choice == 2) {
                     // Get date
-                    // code here
-                    int date = 0;
-                    model.createTransientTask(name, taskType, startTime, duration, date);
+                    System.out.println("Please enter a date in the format MMDDYYYY: ");
+                    int date = Integer.parseInt(scan.nextLine());
+                    while (date < 0) {
+                        System.out.println("Invalid input. Please try again: ");
+                        date = Integer.parseInt(scan.nextLine());
+                    }
+                    
+                    if (model.createTransientTask(name, taskType, startTime, duration, date)) {
+                        System.out.println("Sucessfully created transient task.");
+                    }
+                    else {
+                        System.out.println("Cannot create transient task. Please check inputs and try again.");
+                    }
                 }
                 else {
                     // Get date
-                    // code here
-                    int date = 0;
-                    model.createAntiTask(name, taskType, startTime, duration, date);
+                    System.out.println("Please enter a date in the format MMDDYYYY: ");
+                    int date = Integer.parseInt(scan.nextLine());
+                    while (date < 0) {
+                        System.out.println("Invalid input. Please try again: ");
+                        date = Integer.parseInt(scan.nextLine());
+                    }
+                    
+                    if (model.createAntiTask(name, taskType, startTime, duration, date)) {
+                        System.out.println("Sucessfully created anti-task.");
+                    }
+                    else {
+                        System.out.println("Cannot create anti-task. Please check inputs and try again.");
+                    }
                 }    
                 break;
             // View task
             case 2:
                 System.out.println("Please enter the name of task: ");
                 name = scan.nextLine(); 
-                int pos = model.findTask(name);
+                pos = model.findTask(name);
                 if (pos != -1) {
                     Task myTask = model.getTaskList().get(pos);
                     System.out.println("Name: " + myTask.getName());
                     System.out.println("Type: " + myTask.getType());
                     System.out.println("Start time: " + myTask.getStartTime());
                     System.out.println("Duration: " + myTask.getDuration());
-                    // wip
+                    
+                    if (myTask instanceof RecurringTask) {
+                        RecurringTask rTask = (RecurringTask)myTask;
+                        System.out.println("Start Date: " + rTask.getStartDate());
+                        System.out.println("End Date: " + rTask.getEndDate());
+                        System.out.println("Frequency: " + rTask.getFrequency());
+                    }
+                    else if (myTask instanceof TransientTask) {
+                        TransientTask tTask = (TransientTask)myTask;
+                        System.out.println("Date: " + tTask.getDate());
+                    }
+                    else {
+                        AntiTask aTask = (AntiTask)myTask;
+                        System.out.println("Date: " + aTask.getDate());
+                    }   
                 }
                 else {
-                    System.out.println("Task name does not exists. Please try again.");
+                    System.out.println("Task name does not exist. Please try again.");
                 }
                 break;
                     
