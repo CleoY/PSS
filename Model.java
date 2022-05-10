@@ -15,29 +15,29 @@ public class Model
     public Model() {}
     
     // Create an object of RecurringTask
-    public void createRecurringTask(String name, String type, float startTime, float duration, int startDate, int endDate, int frequency) { 
+    // Create an object of RecurringTask
+    public boolean createRecurringTask(String name, String type, float startTime, float duration, int startDate, int endDate, int frequency) { 
         RecurringTask myTask = new RecurringTask(name, type, startTime, duration, startDate, endDate, frequency);
+        // check overlap
+        // if not overlap, create task, add to list, return true
         addTask(myTask);
-        
-        
-        // This is just for testing
-        System.out.println("Name: " + name);
-        System.out.println("Type: " + type);
-        System.out.println("Start time: " + startTime);
-        System.out.println("Duration: " + duration);
-        System.out.println("Start date: " + startDate);
-        System.out.println("End date: " + endDate);
-        System.out.println("Frequency: " + frequency);
+        return true;
     }
     
-    public void createTransientTask(String name, String type, float startTime, float duration, int date) {
+    public boolean createTransientTask(String name, String type, float startTime, float duration, int date) {
         TransientTask myTask = new TransientTask(name, type, startTime, duration, date);
+        // check overlap
+        // if not overlap, create task, add to list, return true
         addTask(myTask);
+        return true;
     }
     
-    public void createAntiTask(String name, String type, float startTime, float duration, int date) {
+    public boolean createAntiTask(String name, String type, float startTime, float duration, int date) {
         AntiTask myTask = new AntiTask(name, type, startTime, duration, date);
+        // check overlap
+        // if not overlap, create task, add to list, return true
         addTask(myTask);
+        return true;
     }
     
     public ArrayList<Task> getTaskList() {
