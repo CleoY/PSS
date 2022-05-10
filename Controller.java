@@ -39,7 +39,11 @@ public class Controller
             case 1:
                 System.out.println("Please enter the name of task: ");
                 String name = scan.nextLine();
-                // check valid name here
+                int pos = model.findTask(name);
+                while (pos != -1) {
+                    System.out.println("Invalid name. Please enter a different name: ");
+                    name = scan.nextLine();
+                }
                 
                 System.out.println("Please choose the type of task you want to create:\n");
                 System.out.println("1 - Recurring Task");
@@ -244,9 +248,9 @@ public class Controller
             case 3:
                 System.out.println("Please enter the name of task: ");
                 name = scan.nextLine(); 
-                int pos2 = model.findTask(name);
+                pos = model.findTask(name);
                 //Will only delete if the task exists
-                if (pos2 != -1) {
+                if (pos != -1) {
                     Boolean success = model.deleteTask(name);
                     if(success == true)
                     {
