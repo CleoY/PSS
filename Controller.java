@@ -267,7 +267,285 @@ public class Controller
                 break;
             // Edit task
             case 4:
-                
+                 //Input Task Name
+                System.out.println("(Edit)Please enter the name of task: ");
+                name = scan.nextLine(); 
+                //Existed task name
+                pos = model.findTask(name);
+                if (pos != -1) {
+                    Task myTask = model.getTaskList().get(pos);
+                    System.out.println("\n*** TASK INFO ***");
+                    System.out.println("Name: " + myTask.getName());
+                    System.out.println("Type: " + myTask.getType());
+                    System.out.println("Start time: " + myTask.getStartTime());
+                    System.out.println("Duration: " + myTask.getDuration());
+                    
+                    if (myTask instanceof RecurringTask) {
+                        RecurringTask rTask = (RecurringTask)myTask;
+                        System.out.println("Start Date: " + rTask.getStartDate());
+                        System.out.println("End Date: " + rTask.getEndDate());
+                        System.out.println("Frequency: " + rTask.getFrequency());
+
+                        System.out.println("\n What would you like to edit? ");
+                        System.out.println("1 - Name");
+                        System.out.println("2 - Type");
+                        System.out.println("3 - Start Time");
+                        System.out.println("4 - Duration");
+                        System.out.println("5 - Start Date");
+                        System.out.println("6 - End Date");
+                        System.out.println("7 - Frequency");
+                    
+                        int typeChoice = Integer.parseInt(scan.nextLine());
+                        while (typeChoice < 1 || typeChoice > 7) {
+                            System.out.println("Invalid option. Please choose a valid option: ");
+                            typeChoice = Integer.parseInt(scan.nextLine());
+                        }
+                        switch (typeChoice) {
+                            //Edit Name
+                            case 1:
+                            System.out.println("What shall the task be renamed as: ");
+                            String editName = scan.nextLine(); 
+                                rTask.name = editName;
+                                break;
+                            //Edit Type
+                            case 2:
+                            System.out.println("Please choose the new task type: ");
+                            System.out.println("1 - Visit");
+                            System.out.println("2 - Shopping");
+                            System.out.println("3 - Appointment");
+                            
+                            int editType = Integer.parseInt(scan.nextLine());
+                            while (editType < 1 || editType > 6) {
+                                System.out.println("Invalid option. Please choose a valid option: ");
+                                editType = Integer.parseInt(scan.nextLine());
+                                }
+                                switch (editType) {
+                                    case 1:
+                                        rTask.type = "Visit";
+                                        break;
+                                    case 2:
+                                        rTask.type = "Shopping";
+                                        break;  
+                                    case 3: 
+                                        rTask.type = "Appointment";
+                                        break;
+                                    default:
+                                        break;
+                                    }
+                                
+                            break;
+                            //Edit Start Time  
+                            case 3: 
+                                System.out.println("Please enter the start time: ");
+                                float editStartTime = Float.parseFloat(scan.nextLine());
+                                while (editStartTime < 0 || editStartTime > 23.75) {
+                                    System.out.println("Invalid input. Please input a start time between 0 and 23.75: ");
+                                    editStartTime = Float.parseFloat(scan.nextLine());
+                                }
+                                // Round to nearest .25
+                                editStartTime = (float) Math.ceil(editStartTime * 4)/4f;
+                                rTask.startTime = editStartTime;
+                                break;
+                            //Edit Duration
+                            case 4: 
+                                System.out.println("Please enter the duration: ");
+                                float editDuration = Float.parseFloat(scan.nextLine());
+                                while (editDuration < 0.25 || editDuration > 23.75) {
+                                    System.out.println("Invalid input. Please input a start time between 0.25 and 23.75: ");
+                                    duration = Float.parseFloat(scan.nextLine());
+                                } 
+                                // Round to nearest .25
+                                editDuration = (float) Math.ceil(editDuration * 4)/4f;
+                                rTask.duration = editDuration;
+                                break;
+                            //Edit Start Date
+                            case 5: 
+                                System.out.println("Please enter a start date in the format MMDDYYYY: ");
+                                int editStartDate = Integer.parseInt(scan.nextLine());
+                                while (editStartDate < 0) {
+                                    System.out.println("Invalid input. Please try again: ");
+                                    editStartDate = Integer.parseInt(scan.nextLine());
+                                }
+                                rTask.setStartDate(editStartDate);
+                            //Edit End Date
+                            case 6: 
+                                System.out.println("Please enter a start date in the format MMDDYYYY: ");
+                                int endDate = Integer.parseInt(scan.nextLine());
+                                while (endDate < rTask.getStartDate()) {
+                                    System.out.println("Invalid input: End date must be after start date. Please try again: ");
+                                    endDate = Integer.parseInt(scan.nextLine());
+                                }
+                                break;
+                            //Edit Frequency
+                            case 7: 
+                                System.out.println("Please enter a frequency (1-7): ");
+                                int newFrequency = Integer.parseInt(scan.nextLine());
+                                while (newFrequency < 1 || newFrequency > 7) {
+                                    System.out.println("Invalid input: Frequency must be an integer between 1 and 7. Please try again: ");
+                                    newFrequency = Integer.parseInt(scan.nextLine());
+                                }
+                                rTask.duration = newFrequency;
+                                break;
+                            default:
+                                taskType = "";
+                                break;
+                        }
+                    }
+                    //Edit Transient Task
+                    else if (myTask instanceof TransientTask) {
+                        TransientTask tTask = (TransientTask)myTask;
+                        System.out.println("Date: " + tTask.getDate());
+                        System.out.println("What would you like to edit? ");
+                        System.out.println("1 - Name");
+                        System.out.println("2 - Type");
+                        System.out.println("3 - Start Time");
+                        System.out.println("4 - Duration");
+                        System.out.println("5 - Start Date");
+                        int typeChoice = Integer.parseInt(scan.nextLine());
+                        while (typeChoice < 1 || typeChoice > 5) {
+                            System.out.println("Invalid option. Please choose a valid option: ");
+                            typeChoice = Integer.parseInt(scan.nextLine());
+                        }
+                        switch (typeChoice) {
+                            //Edit Name
+                            case 1:
+                            System.out.println("What shall the task be renamed as: ");
+                            String editName = scan.nextLine(); 
+                                tTask.name = editName;
+                                break;
+                            //Edit Type
+                            case 2:
+                            System.out.println("Please choose the new task type: ");
+                            System.out.println("1 - Visit");
+                            System.out.println("2 - Shopping");
+                            System.out.println("3 - Appointment");
+                            
+                            int editType = Integer.parseInt(scan.nextLine());
+                            while (editType < 1 || editType > 6) {
+                                System.out.println("Invalid option. Please choose a valid option: ");
+                                editType = Integer.parseInt(scan.nextLine());
+                                }
+                                switch (editType) {
+                                    case 1:
+                                        tTask.type = "Visit";
+                                        break;
+                                    case 2:
+                                        tTask.type = "Shopping";
+                                        break;  
+                                    case 3: 
+                                        tTask.type = "Appointment";
+                                        break;
+                                    default:
+                                        break;
+                                    }
+                                
+                            break;
+                            //Edit Start Time  
+                            case 3: 
+                                System.out.println("Please enter the start time: ");
+                                float editStartTime = Float.parseFloat(scan.nextLine());
+                                while (editStartTime < 0 || editStartTime > 23.75) {
+                                    System.out.println("Invalid input. Please input a start time between 0 and 23.75: ");
+                                    editStartTime = Float.parseFloat(scan.nextLine());
+                                }
+                                // Round to nearest .25
+                                editStartTime = (float) Math.ceil(editStartTime * 4)/4f;
+                                tTask.startTime = editStartTime;
+                            break;
+                            //Edit Duration
+                            case 4: 
+                                System.out.println("Please enter the duration: ");
+                                float editDuration = Float.parseFloat(scan.nextLine());
+                                while (editDuration < 0.25 || editDuration > 23.75) {
+                                    System.out.println("Invalid input. Please input a start time between 0.25 and 23.75: ");
+                                    duration = Float.parseFloat(scan.nextLine());
+                                } 
+                                // Round to nearest .25
+                                editDuration = (float) Math.ceil(editDuration * 4)/4f;
+                                tTask.duration = editDuration;
+                                break;
+                            //Edit Start Date
+                            case 5: 
+                                System.out.println("Please enter a start date in the format MMDDYYYY: ");
+                                int editStartDate = Integer.parseInt(scan.nextLine());
+                                // Need more check
+                                while (editStartDate < 0) {
+                                    System.out.println("Invalid input. Please try again: ");
+                                    editStartDate = Integer.parseInt(scan.nextLine());
+                                }
+                                tTask.setDate(editStartDate);
+                            default:
+                                taskType = "";
+                                break;
+                        }
+                    
+                    }
+                    //Edit Anti-Task
+                    else {
+                        AntiTask aTask = (AntiTask)myTask;
+                        System.out.println("Date: " + aTask.getDate());
+                        System.out.println("What would you like to edit? ");
+                        System.out.println("1 - Name");
+                        System.out.println("2 - Start Time");
+                        System.out.println("3 - Duration");
+                        System.out.println("4 - Date");
+                        int typeChoice = Integer.parseInt(scan.nextLine());
+                        while (typeChoice < 1 || typeChoice > 4) {
+                            System.out.println("Invalid option. Please choose a valid option: ");
+                            typeChoice = Integer.parseInt(scan.nextLine());
+                        }
+                        switch (typeChoice) {
+                            //Edit Name
+                            case 1:
+                            System.out.println("What shall the task be renamed as: ");
+                            String editName = scan.nextLine(); 
+                                aTask.name = editName;
+                                break;
+                            //Edit Start Time  (same check as delete) also need to check if new start time is valid
+                            case 2: 
+                                System.out.println("Please enter the start time: ");
+                                float editStartTime = Float.parseFloat(scan.nextLine());
+                                while (editStartTime < 0 || editStartTime > 23.75) {
+                                    System.out.println("Invalid input. Please input a start time between 0 and 23.75: ");
+                                    editStartTime = Float.parseFloat(scan.nextLine());
+                                }
+                                // Round to nearest .25
+                                editStartTime = (float) Math.ceil(editStartTime * 4)/4f;
+                                aTask.startTime = editStartTime;
+                                break;
+                            //Edit Duration
+                            case 3: 
+                                System.out.println("Please enter the duration: ");
+                                float editDuration = Float.parseFloat(scan.nextLine());
+                                while (editDuration < 0.25 || editDuration > 23.75) {
+                                    System.out.println("Invalid input. Please input a start time between 0.25 and 23.75: ");
+                                    duration = Float.parseFloat(scan.nextLine());
+                                } 
+                                // Round to nearest .25
+                                editDuration = (float) Math.ceil(editDuration * 4)/4f;
+                                aTask.duration = editDuration;
+                                break;
+                            //Edit Start Date
+                            case 4: 
+                                System.out.println("Please enter a start date in the format MMDDYYYY: ");
+                                int editStartDate = Integer.parseInt(scan.nextLine());
+                                // Need more check
+                                while (editStartDate < 0) {
+                                    System.out.println("Invalid input. Please try again: ");
+                                    editStartDate = Integer.parseInt(scan.nextLine());
+                                }
+                                //Checking for overlap
+                                aTask.setDate(editStartDate);
+                            default:
+                                taskType = "";
+                                break;
+                            }
+                    }   
+                }
+                //Non existed task name
+                else {
+                    System.out.println("Task name does not exist. Please try again.");
+                }
                 break;
             // Write schedule
             case 5:
