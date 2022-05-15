@@ -1,3 +1,7 @@
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.*;
 
 /**
  * Write a description of class Model here.
@@ -5,9 +9,6 @@
  * @author (your name)
  * @version (a version number or a date)
  */
-
-import java.util.*;
-
 public class Model
 {
     private ArrayList<Task> listOfTask = new ArrayList<Task>();
@@ -16,7 +17,7 @@ public class Model
     
     // Create an object of RecurringTask
     // Create an object of RecurringTask
-    public boolean createRecurringTask(String name, String type, float startTime, float duration, int startDate, int endDate, int frequency) { 
+    public boolean createRecurringTask(String name, String type, float startTime, float duration, int startDate, int endDate, int frequency) throws ParseException{ 
         RecurringTask myTask = new RecurringTask(name, type, startTime, duration, startDate, endDate, frequency);
         // check overlap
         // if not overlap, create task, add to list, return true
@@ -24,7 +25,7 @@ public class Model
         return true;
     }
     
-    public boolean createTransientTask(String name, String type, float startTime, float duration, int date) {
+    public boolean createTransientTask(String name, String type, float startTime, float duration, int date) throws ParseException{
         TransientTask myTask = new TransientTask(name, type, startTime, duration, date);
         // check overlap
         // if not overlap, create task, add to list, return true
@@ -32,7 +33,7 @@ public class Model
         return true;
     }
     
-    public boolean createAntiTask(String name, String type, float startTime, float duration, int date) {
+    public boolean createAntiTask(String name, String type, float startTime, float duration, int date) throws ParseException{
         AntiTask myTask = new AntiTask(name, type, startTime, duration, date);
         // check overlap
         // if not overlap, create task, add to list, return true
