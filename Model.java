@@ -194,6 +194,20 @@ public class Model
             //get existing task's type, date(s), startTime, and duration
             existingTask = listOfTask.get(j);
             existingTaskType = existingTask.getType();
+            if(existingTask instanceof TransientTask){
+                existingTaskStartDate = ((TransientTask)newTask).getDateObject();
+                existingTaskStartTime = ((TransientTask)newTask).getStartTime();
+                existingTaskDuration = ((TransientTask)newTask).getDuration();
+            } else if (newTask instanceof RecurringTask){
+                existingTaskStartDate = ((RecurringTask)newTask).getStartDateObject();
+                existingTaskEndDate = ((RecurringTask)newTask).getEndDateObject();
+                existingTaskStartTime = ((RecurringTask)newTask).getStartTime();
+                existingTaskDuration = ((RecurringTask)newTask).getDuration();
+            } else{
+                existingTaskStartDate = ((AntiTask)newTask).getDateObject();
+                existingTaskStartTime = ((AntiTask)newTask).getStartTime();
+                existingTaskDuration = ((AntiTask)newTask).getDuration();
+            }
             
             //any combo of Transient and Anti-Tasks
             if(!(newTask instanceof RecurringTask) && !(existingTask instanceof RecurringTask)){
