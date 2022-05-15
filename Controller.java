@@ -267,7 +267,7 @@ public class Controller
                 break;
             // Edit task
             case 4:
-                 //Input Task Name
+                  //Input Task Name
                 System.out.println("(Edit)Please enter the name of task: ");
                 name = scan.nextLine(); 
                 //Existed task name
@@ -367,14 +367,16 @@ public class Controller
                                     editStartDate = Integer.parseInt(scan.nextLine());
                                 }
                                 rTask.setStartDate(editStartDate);
+                                break;
                             //Edit End Date
                             case 6: 
-                                System.out.println("Please enter a start date in the format MMDDYYYY: ");
+                                System.out.println("Please enter a end date in the format MMDDYYYY: ");
                                 int endDate = Integer.parseInt(scan.nextLine());
                                 while (endDate < rTask.getStartDate()) {
                                     System.out.println("Invalid input: End date must be after start date. Please try again: ");
                                     endDate = Integer.parseInt(scan.nextLine());
                                 }
+                                rTask.setEndDate(endDate);
                                 break;
                             //Edit Frequency
                             case 7: 
@@ -384,12 +386,20 @@ public class Controller
                                     System.out.println("Invalid input: Frequency must be an integer between 1 and 7. Please try again: ");
                                     newFrequency = Integer.parseInt(scan.nextLine());
                                 }
-                                rTask.duration = newFrequency;
+                                rTask.setFrequency(newFrequency);
                                 break;
                             default:
                                 taskType = "";
                                 break;
                         }
+                        System.out.println("\n*** UPDATED TASK INFO ***");
+                        System.out.println("Name: " + myTask.getName());
+                        System.out.println("Type: " + myTask.getType());
+                        System.out.println("Start time: " + myTask.getStartTime());
+                        System.out.println("Duration: " + myTask.getDuration());
+                        System.out.println("Start Date: " + rTask.getStartDate());
+                        System.out.println("End Date: " + rTask.getEndDate());
+                        System.out.println("Frequency: " + rTask.getFrequency());
                     }
                     //Edit Transient Task
                     else if (myTask instanceof TransientTask) {
@@ -478,7 +488,12 @@ public class Controller
                                 taskType = "";
                                 break;
                         }
-                    
+                        System.out.println("\n*** UPDATED TASK INFO ***");
+                        System.out.println("Name: " + myTask.getName());
+                        System.out.println("Type: " + myTask.getType());
+                        System.out.println("Start time: " + myTask.getStartTime());
+                        System.out.println("Duration: " + myTask.getDuration());
+                        System.out.println("Date: " + tTask.getDate());
                     }
                     //Edit Anti-Task
                     else {
@@ -540,6 +555,12 @@ public class Controller
                                 taskType = "";
                                 break;
                             }
+                        System.out.println("\n*** UPDATED TASK INFO ***");
+                        System.out.println("Name: " + myTask.getName());
+                        System.out.println("Type: " + myTask.getType());
+                        System.out.println("Start time: " + myTask.getStartTime());
+                        System.out.println("Duration: " + myTask.getDuration());
+                        System.out.println("Date: " + aTask.getDate());
                     }   
                 }
                 //Non existed task name
