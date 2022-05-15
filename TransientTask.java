@@ -30,6 +30,7 @@ public class TransientTask extends Task
         this.duration = duration;
         this.date = date;
         this.dateObject = dateParser.parse(""+date);
+        this.endTime = (startTime+duration)%(24); //task wraps past midnight
         
         //initialize endDateObject
         if(startTime + duration > 24){ //task wraps past midnight

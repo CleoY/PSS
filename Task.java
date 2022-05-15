@@ -12,6 +12,7 @@ public abstract class Task
     String type;
     float startTime;
     float duration;
+    float endTime;
     
     public Task() {}
 
@@ -31,6 +32,10 @@ public abstract class Task
         return duration;
     }
     
+    public float getEndTime(){
+        return endTime;
+    }
+    
     public void setName(String name) {
         this.name = name;
     }
@@ -41,9 +46,13 @@ public abstract class Task
     
     public void setStartTime(float startTime) {
         this.startTime = startTime;
+        //changing startTime also affects endTime
+        this.endTime = (startTime + duration)%24;
     }
     
     public void setDuration(float duration) {
         this.duration = duration;
+        //changing duration affects endTime
+        this.endTime = (startTime + duration)%24;
     }
 }

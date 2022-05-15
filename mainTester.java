@@ -5,21 +5,39 @@ import java.util.Date;
 public class mainTester
 {
     public static void main(String[] args) throws ParseException{
-        AntiTask aTask = new AntiTask("anti","antiType",5,20f,20220509);
+        AntiTask aTask = new AntiTask("anti","antiType",5,19f,20220509);
         TransientTask tTask = new TransientTask("trans","transType",23,1f,20220508);
         RecurringTask rTask = new RecurringTask("rec1","RecType",5,3,20220427, 20220602,1);
         
-        Date antiDate = aTask.getDateObject();
-        System.out.println(antiDate);
+        float startTime = tTask.getStartTime();
+        System.out.println("Start time1: "+startTime);
         
-        Date antiEndDate = aTask.getEndDateObject();
-        System.out.println(antiEndDate);
+        float endTime = tTask.getEndTime();
+        System.out.println("End time1: "+endTime);
         
-        aTask.setDate(20021231);
-        antiDate = aTask.getDateObject();
-        System.out.println(antiDate);
-        antiEndDate = aTask.getEndDateObject();
-        System.out.println(antiEndDate);
+        tTask.setStartTime(22);
+        startTime = tTask.getStartTime();
+        System.out.println("Start time2: "+startTime);
+        endTime = tTask.getEndTime();
+        System.out.println("End time2: "+endTime);
+        
+        tTask.setDuration(3);
+        startTime = tTask.getStartTime();
+        System.out.println("Start time3: "+startTime);
+        endTime = tTask.getEndTime();
+        System.out.println("End time3: "+endTime);
+        
+        // Date antiDate = aTask.getDateObject();
+        // System.out.println(antiDate);
+        
+        // Date antiEndDate = aTask.getEndDateObject();
+        // System.out.println(antiEndDate);
+        
+        // aTask.setDate(20021231);
+        // antiDate = aTask.getDateObject();
+        // System.out.println(antiDate);
+        // antiEndDate = aTask.getEndDateObject();
+        // System.out.println(antiEndDate);
         
         // Date transDate = tTask.getDateObject();
         // System.out.println(transDate);

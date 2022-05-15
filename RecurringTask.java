@@ -32,6 +32,7 @@ public class RecurringTask extends Task
         this.startDate = startDate;
         this.endDate = endDate;
         this.frequency = frequency;
+        this.endTime = (startTime+duration)%(24); //task wraps past midnight
         
         this.startDateObject = dateParser.parse(""+startDate);
         this.endDateObject = dateParser.parse(""+endDate);        
