@@ -32,6 +32,10 @@ public class TransientTask extends Task
         return date;
     }
     
+    public Date getDateObject(){
+        return dateObject;
+    }
+    
     public void setDate(int date) throws ParseException{
         this.date = date;
         this.dateObject = dateParser.parse(""+date);

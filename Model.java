@@ -147,11 +147,11 @@ public class Model
         String existingTaskType;
         
         //dates
-        float newTaskStartDate;
-        float existingTaskStartDate;
+        Date newTaskStartDate;
+        Date existingTaskStartDate;
         
-        float newTaskEndDate; //could be same day as startDate
-        float existingTaskEndDate;
+        Date newTaskEndDate; //could be same day as startDate
+        Date existingTaskEndDate;
         
         //times
         float newTaskStartTime;
@@ -171,7 +171,7 @@ public class Model
         // get startDate/date, startTime, duration, and type of newTask
         newTaskType = newTask.getType();
         if(newTask instanceof TransientTask){
-            newTaskStartDate = ((TransientTask)newTask).getDate();
+            newTaskStartDate = ((TransientTask)newTask).getDateObject();
             newTaskStartTime = ((TransientTask)newTask).getStartTime();
             newTaskDuration = ((TransientTask)newTask).getDuration();
             
@@ -180,12 +180,12 @@ public class Model
             // newTaskStartTime = newTransientTask.getStartTime();
             // newTaskDuration = newTransientTask.getDuration();
         } else if (newTask instanceof RecurringTask){
-            newTaskStartDate = ((RecurringTask)newTask).getStartDate();
-            newTaskEndDate = ((RecurringTask)newTask).getEndDate();
+            newTaskStartDate = ((RecurringTask)newTask).getStartDateObject();
+            newTaskEndDate = ((RecurringTask)newTask).getEndDateObject();
             newTaskStartTime = ((RecurringTask)newTask).getStartTime();
             newTaskDuration = ((RecurringTask)newTask).getDuration();
         } else{
-            newTaskStartDate = ((AntiTask)newTask).getDate();
+            newTaskStartDate = ((AntiTask)newTask).getDateObject();
             newTaskStartTime = ((AntiTask)newTask).getStartTime();
             newTaskDuration = ((AntiTask)newTask).getDuration();
         }
