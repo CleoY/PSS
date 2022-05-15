@@ -1,5 +1,3 @@
-package PSS_CS3560;
-
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
