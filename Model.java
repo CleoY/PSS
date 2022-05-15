@@ -132,4 +132,79 @@ public class Model
         }
         return true;
     }
+    
+    private boolean checkOverlap(Task newTask){
+        //names
+        String newName = newTask.getName();
+        String existingName;
+        
+        //temp variable for existing Tasks in listOfTask
+        Task existingTask;
+        
+        //types
+        String newTaskType;
+        String existingTaskType;
+        
+        //dates
+        float newTaskStartDate;
+        float existingTaskStartDate;
+        
+        float newTaskEndDate; //could be same day as startDate
+        float existingTaskEndDate;
+        
+        //times
+        float newTaskStartTime;
+        float existingTaskStartTime;
+        float newTaskDuration;
+        float existingTaskDuration;
+        
+        //check for name overlap
+        for(int i=0; i<listOfTask.size(); i++){
+            existingName = listOfTask.get(i).getName();
+            if(newName.equals(existingName) == true){
+                System.out.println("The task name overlaps.");
+                return true; //the names overlap
+            }
+        }
+        
+        // get startDate/date, startTime, duration, and type of newTask
+        newTaskType = newTask.getType();
+        if(newTask instanceof TransientTask){
+            newTaskStartDate = ((TransientTask)newTask).getDate();
+            newTaskStartTime = ((TransientTask)newTask).getStartTime();
+            newTaskDuration = ((TransientTask)newTask).getDuration();
+            
+            // TransientTask newTransientTask = (TransientTask)newTask;
+            // newTaskStartDate = newTransientTask.getDate();
+            // newTaskStartTime = newTransientTask.getStartTime();
+            // newTaskDuration = newTransientTask.getDuration();
+        } else if (newTask instanceof RecurringTask){
+            newTaskStartDate = ((RecurringTask)newTask).getStartDate();
+            newTaskEndDate = ((RecurringTask)newTask).getEndDate();
+            newTaskStartTime = ((RecurringTask)newTask).getStartTime();
+            newTaskDuration = ((RecurringTask)newTask).getDuration();
+        } else{
+            newTaskStartDate = ((AntiTask)newTask).getDate();
+            newTaskStartTime = ((AntiTask)newTask).getStartTime();
+            newTaskDuration = ((AntiTask)newTask).getDuration();
+        }
+        
+        for(int j=0; j<listOfTask.size(); j++){
+            //get existing task's type, date(s), startTime, and duration
+            existingTask = listOfTask.get(j);
+            existingTaskType = existingTask.getType();
+            
+            //any combo of Transient and Anti-Tasks
+            if(!(newTask instanceof RecurringTask) && !(existingTask instanceof RecurringTask)){
+                //check overlap of dates first
+                
+            }
+        }
+        
+        
+        return false;
+    }
+    private Task findTaskFromNameBinarySearch(String name){
+        return null;
+    }
 }

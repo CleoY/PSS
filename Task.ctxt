@@ -1,0 +1,22 @@
+#BlueJ class context
+comment0.target=Task
+comment0.text=\n\ Abstract\ class\ Task\ -\ write\ a\ description\ of\ the\ class\ here\n\n\ @author\ (your\ name\ here)\n\ @version\ (version\ number\ or\ date\ here)\n
+comment1.params=
+comment1.target=Task()
+comment2.params=
+comment2.target=java.lang.String\ getName()
+comment3.params=
+comment3.target=java.lang.String\ getType()
+comment4.params=
+comment4.target=float\ getStartTime()
+comment5.params=
+comment5.target=float\ getDuration()
+comment6.params=name
+comment6.target=void\ setName(java.lang.String)
+comment7.params=type
+comment7.target=void\ setType(java.lang.String)
+comment8.params=startTime
+comment8.target=void\ setStartTime(float)
+comment9.params=duration
+comment9.target=void\ setDuration(float)
+numComments=10
