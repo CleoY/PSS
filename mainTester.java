@@ -9,22 +9,22 @@ public class mainTester
         TransientTask tTask = new TransientTask("trans","transType",23,1f,20220508);
         RecurringTask rTask = new RecurringTask("rec1","RecType",5,3,20220427, 20220602,1);
         
-        float startTime = tTask.getStartTime();
+        float startTime = rTask.getStartTime();
         System.out.println("Start time1: "+startTime);
         
-        float endTime = tTask.getEndTime();
+        float endTime = rTask.getEndTime();
         System.out.println("End time1: "+endTime);
         
-        tTask.setStartTime(22);
-        startTime = tTask.getStartTime();
+        rTask.setStartTime(22);
+        startTime = rTask.getStartTime();
         System.out.println("Start time2: "+startTime);
-        endTime = tTask.getEndTime();
+        endTime = rTask.getEndTime();
         System.out.println("End time2: "+endTime);
         
-        tTask.setDuration(3);
-        startTime = tTask.getStartTime();
+        rTask.setDuration(5);
+        startTime = rTask.getStartTime();
         System.out.println("Start time3: "+startTime);
-        endTime = tTask.getEndTime();
+        endTime = rTask.getEndTime();
         System.out.println("End time3: "+endTime);
         
         // Date antiDate = aTask.getDateObject();
