@@ -171,40 +171,24 @@ public class Model
             }
         }
         
-        // get startDate/date, startTime, endTime, duration, and type of newTask
+        // get type, startDate, endDate, startTime, endTime, and duration of newTask
         newTaskType = newTask.getType();
+        newTaskStartDate = newTask.getStartDateObject();
+        newTaskEndDate = newTask.getEndDateObject();
         newTaskStartTime = newTask.getStartTime();
         newTaskEndTime = newTask.getEndTime();
         newTaskDuration = newTask.getDuration();
-        // if(newTask instanceof TransientTask){
-            // newTaskStartDate = ((TransientTask)newTask).getDateObject();
-            // newTaskEndDate = ((TransientTask)newTask).getEndDateObject();
-        // } else if (newTask instanceof RecurringTask){
-            // newTaskStartDate = ((RecurringTask)newTask).getStartDateObject();
-            // newTaskEndDate = ((RecurringTask)newTask).getEndDateObject();
-        // } else{
-            // newTaskStartDate = newTask.getStartDateObject();
-            // newTaskEndDate = newTask.getEndDateObject();
-        // }
         
         for(int j=0; j<listOfTask.size(); j++){
-            //get existing task's type, date(s), startTime, and duration
             existingTask = listOfTask.get(j);
+            
+            //get existing task's type, date(s), startTime, and duration
             existingTaskType = existingTask.getType();
-            // if(existingTask instanceof TransientTask){
-                // existingTaskStartDate = ((TransientTask)newTask).getDateObject();
-                // existingTaskStartTime = ((TransientTask)newTask).getStartTime();
-                // existingTaskDuration = ((TransientTask)newTask).getDuration();
-            // } else if (newTask instanceof RecurringTask){
-                // existingTaskStartDate = ((RecurringTask)newTask).getStartDateObject();
-                // existingTaskEndDate = ((RecurringTask)newTask).getEndDateObject();
-                // existingTaskStartTime = ((RecurringTask)newTask).getStartTime();
-                // existingTaskDuration = ((RecurringTask)newTask).getDuration();
-            // } else{
-                // // existingTaskStartDate = ((AntiTask)newTask).getDateObject();
-                // // existingTaskStartTime = ((AntiTask)newTask).getStartTime();
-                // // existingTaskDuration = ((AntiTask)newTask).getDuration();
-            // }
+            existingTaskStartDate = existingTask.getStartDateObject();
+            existingTaskEndDate = existingTask.getEndDateObject();
+            existingTaskStartTime = existingTask.getStartTime();
+            existingTaskEndTime = existingTask.getEndTime();
+            existingTaskDuration = existingTask.getDuration();
             
             //any combo of Transient and Anti-Tasks
             if(!(newTask instanceof RecurringTask) && !(existingTask instanceof RecurringTask)){
