@@ -12,8 +12,6 @@ import java.util.Calendar;
 public class TransientTask extends Task
 {
     private int date;
-    private Date dateObject;
-    private Date endDateObject; //may be the same as startDate; accounts for tasks that wrap past midnight
     
     private SimpleDateFormat dateParser = new SimpleDateFormat("yyyyMMdd");
     private Calendar calendar = Calendar.getInstance();
@@ -29,16 +27,16 @@ public class TransientTask extends Task
         this.startTime = startTime;
         this.duration = duration;
         this.date = date;
-        this.dateObject = dateParser.parse(""+date);
+        this.startDateObject = dateParser.parse(""+date);
         this.endTime = (startTime+duration)%(24); //task wraps past midnight
         
         //initialize endDateObject
         if(startTime + duration > 24){ //task wraps past midnight
-            calendar.setTime(dateObject);
+            calendar.setTime(startDateObject);
             calendar.add(Calendar.DATE, 1); //increment by 1 day
             endDateObject = calendar.getTime();
         } else{ //task does NOT wrap past midnight
-            endDateObject = dateObject;
+            endDateObject = startDateObject;
         }
     }
     
@@ -46,25 +44,17 @@ public class TransientTask extends Task
         return date;
     }
     
-    public Date getDateObject(){
-        return dateObject;
-    }
-    
-    public Date getEndDateObject(){
-        return endDateObject;
-    }
-    
     public void setDate(int date) throws ParseException{
         this.date = date;
-        this.dateObject = dateParser.parse(""+date);
+        this.startDateObject = dateParser.parse(""+date);
         
         //set endDateObject
         if(startTime + duration > 24){ //task wraps past midnight
-            calendar.setTime(dateObject);
+            calendar.setTime(startDateObject);
             calendar.add(Calendar.DATE, 1); //increment by 1 day
             endDateObject = calendar.getTime();
         } else{ //task does NOT wrap past midnight
-            endDateObject = dateObject;
+            endDateObject = startDateObject;
         }
     }
 }
