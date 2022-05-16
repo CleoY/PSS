@@ -15,8 +15,6 @@ public class RecurringTask extends Task
     private int endDate;
     private int frequency;
     
-    private Date startDateObject;
-    private Date endDateObject;
     private SimpleDateFormat dateParser = new SimpleDateFormat("yyyyMMdd");
     
     // Not sure if necessary but leaving this here for now
@@ -42,16 +40,8 @@ public class RecurringTask extends Task
         return startDate;
     }
     
-    public Date getStartDateObject(){
-        return startDateObject;
-    }
-    
     public int getEndDate() {
         return endDate;
-    }
-    
-    public Date getEndDateObject(){
-        return endDateObject;
     }
     
     public int getFrequency() {
