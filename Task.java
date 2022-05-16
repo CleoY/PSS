@@ -1,3 +1,6 @@
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Calendar;
 
 /**
  * Abstract class Task - write a description of the class here
@@ -13,6 +16,10 @@ public abstract class Task
     float startTime;
     float duration;
     float endTime;
+    
+    Date startDateObject;
+    Date endDateObject; 
+    //^may be the same as startDate; accounts for Transient and Anti tasks that wrap past midnight
     
     public Task() {}
 
@@ -34,6 +41,14 @@ public abstract class Task
     
     public float getEndTime(){
         return endTime;
+    }
+    
+    public Date getStartDateObject(){
+        return startDateObject;
+    }
+    
+    public Date getEndDateObject(){
+        return endDateObject;
     }
     
     public void setName(String name) {

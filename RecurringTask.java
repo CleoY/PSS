@@ -58,12 +58,14 @@ public class RecurringTask extends Task
         return frequency;
     }
     
-    public void setStartDate(int startDate) {
+    public void setStartDate(int startDate) throws ParseException{
         this.startDate = startDate;
+        this.startDateObject = dateParser.parse(""+startDate);
     }
     
-    public void setEndDate(int endDate) {
+    public void setEndDate(int endDate) throws ParseException{
         this.endDate = endDate;
+        this.endDateObject = dateParser.parse(""+endDate); 
     }
     
     public void setFrequency(int frequency) {

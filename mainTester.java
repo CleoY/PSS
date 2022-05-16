@@ -9,23 +9,40 @@ public class mainTester
         TransientTask tTask = new TransientTask("trans","transType",23,1f,20220508);
         RecurringTask rTask = new RecurringTask("rec1","RecType",5,3,20220427, 20220602,1);
         
-        float startTime = rTask.getStartTime();
-        System.out.println("Start time1: "+startTime);
+        Date recStartDate = rTask.getStartDateObject();
+        System.out.println(recStartDate);
+        Date recEndDate = rTask.getEndDateObject();
+        System.out.println(recEndDate);
         
-        float endTime = rTask.getEndTime();
-        System.out.println("End time1: "+endTime);
+        rTask.setStartDate(20000114);
+        recStartDate = rTask.getStartDateObject();
+        System.out.println(recStartDate);
         
-        rTask.setStartTime(22);
-        startTime = rTask.getStartTime();
-        System.out.println("Start time2: "+startTime);
-        endTime = rTask.getEndTime();
-        System.out.println("End time2: "+endTime);
+        rTask.setEndDate(20000115);
+        recEndDate = rTask.getEndDateObject();
+        System.out.println(recEndDate);
         
-        rTask.setDuration(5);
-        startTime = rTask.getStartTime();
-        System.out.println("Start time3: "+startTime);
-        endTime = rTask.getEndTime();
-        System.out.println("End time3: "+endTime);
+        
+        
+        // float startTime = aTask.getStartTime();
+        // System.out.println("Start time1: "+startTime);
+        
+        // float endTime = aTask.getEndTime();
+        // System.out.println("End time1: "+endTime);
+        
+        // aTask.setStartTime(22);
+        // startTime = aTask.getStartTime();
+        // System.out.println("Start time2: "+startTime);
+        // endTime = aTask.getEndTime();
+        // System.out.println("End time2: "+endTime);
+        
+        // aTask.setDuration(5);
+        // startTime = aTask.getStartTime();
+        // System.out.println("Start time3: "+startTime);
+        // endTime = aTask.getEndTime();
+        // System.out.println("End time3: "+endTime);
+        
+        
         
         // Date antiDate = aTask.getDateObject();
         // System.out.println(antiDate);

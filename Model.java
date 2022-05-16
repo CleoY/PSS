@@ -183,8 +183,8 @@ public class Model
             newTaskStartDate = ((RecurringTask)newTask).getStartDateObject();
             newTaskEndDate = ((RecurringTask)newTask).getEndDateObject();
         } else{
-            newTaskStartDate = ((AntiTask)newTask).getDateObject();
-            newTaskEndDate = ((AntiTask)newTask).getEndDateObject();
+            newTaskStartDate = newTask.getStartDateObject();
+            newTaskEndDate = newTask.getEndDateObject();
         }
         
         for(int j=0; j<listOfTask.size(); j++){
@@ -201,9 +201,9 @@ public class Model
                 existingTaskStartTime = ((RecurringTask)newTask).getStartTime();
                 existingTaskDuration = ((RecurringTask)newTask).getDuration();
             } else{
-                existingTaskStartDate = ((AntiTask)newTask).getDateObject();
-                existingTaskStartTime = ((AntiTask)newTask).getStartTime();
-                existingTaskDuration = ((AntiTask)newTask).getDuration();
+                // existingTaskStartDate = ((AntiTask)newTask).getDateObject();
+                // existingTaskStartTime = ((AntiTask)newTask).getStartTime();
+                // existingTaskDuration = ((AntiTask)newTask).getDuration();
             }
             
             //any combo of Transient and Anti-Tasks
