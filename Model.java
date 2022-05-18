@@ -19,25 +19,34 @@ public class Model
     public boolean createRecurringTask(String name, String type, float startTime, float duration, int startDate, int endDate, int frequency) { 
         RecurringTask myTask = new RecurringTask(name, type, startTime, duration, startDate, endDate, frequency);
         // check overlap
-        // if not overlap, create task, add to list, return true
-        addTask(myTask);
-        return true;
+        // if not overlap, add to list, return true
+        if (!checkOverlap(myTask)) {
+            addTask(myTask);
+            return true;
+        }
+        return false;
     }
     
     public boolean createTransientTask(String name, String type, float startTime, float duration, int date) {
         TransientTask myTask = new TransientTask(name, type, startTime, duration, date);
         // check overlap
-        // if not overlap, create task, add to list, return true
-        addTask(myTask);
-        return true;
+        // if not overlap, add to list, return true
+        if (!checkOverlap(myTask)) {
+            addTask(myTask);
+            return true;
+        }
+        return false;
     }
     
     public boolean createAntiTask(String name, String type, float startTime, float duration, int date) {
         AntiTask myTask = new AntiTask(name, type, startTime, duration, date);
         // check overlap
-        // if not overlap, create task, add to list, return true
-        addTask(myTask);
-        return true;
+        // if not overlap, add to list, return true
+        if (!checkOverlap(myTask)) {
+            addTask(myTask);
+            return true;
+        }
+        return false;
     }
     
     public ArrayList<Task> getTaskList() {
