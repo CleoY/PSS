@@ -192,8 +192,28 @@ public class Model
             
             //any combo of Transient and Anti-Tasks
             if(!(newTask instanceof RecurringTask) && !(existingTask instanceof RecurringTask)){
+                System.out.println("Neither task is recurring");
                 //check overlap of dates first
-                
+                //newTask ends before or on the same day existingTask starts (cases b, c, d)
+                if(newTaskEndDate.compareTo(existingTaskStartDate)<=0){
+                   System.out.println("NEWTASK ends before or on existingTask's date");
+                    //OVERLAP: newTask ends during or after existingTask starts
+                   //No overlap: newTask ends before existingTask starts
+                    if(newTaskEndTime > existingTaskStartTime){
+                        System.out.println("NEWTASK ends during or after existingTask");
+                       return true;
+                   }
+                }
+                //REVERSE: existing Task ends before or on same day newTask starts (cases e, g, h)
+                else if(existingTaskEndDate.compareTo(newTaskStartDate)<=0){
+                    System.out.println("EXISTINGTASK ends before or on newTask's date");
+                    //OVERLAP: existingTask ends during or after newTask starts
+                    //No overlap: existingTask ends before newTask starts
+                    if(existingTaskEndTime > newTaskStartTime){
+                        System.out.println("EXISTINGTASK ends during or after newTask");
+                        return true;
+                    }
+                }
             }
         }
         
