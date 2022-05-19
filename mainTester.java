@@ -10,7 +10,7 @@ public class mainTester
         
         
         
-        AntiTask aTask = new AntiTask("anti","antiType",0,1f,20220509);
+        AntiTask aTask = new AntiTask("anti","antiType",23,8f,20220508);
         TransientTask tTask = new TransientTask("trans","transType",3,3f,20220509);
         RecurringTask rTask = new RecurringTask("rec1","RecType",5,3,20220427, 20220602,1);
         
@@ -36,8 +36,8 @@ public class mainTester
         
         
         
-        listOfTask.add(aTask);
-        boolean ovie = checkOverlap(tTask);
+        listOfTask.add(tTask);
+        boolean ovie = checkOverlap(aTask);
         System.out.println("Check overlap: "+ovie);
         
         

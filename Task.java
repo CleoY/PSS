@@ -63,7 +63,7 @@ public abstract class Task
         this.startTime = startTime;
         //changing startTime also affects endTime
         this.endTime = (startTime + duration)%24;
-        startDateObject.setTime(convertTime(startTime));
+        //startDateObject.setTime(convertTime(startTime));
     }
     
     public void setDuration(float duration) {
@@ -72,19 +72,19 @@ public abstract class Task
         this.endTime = (startTime + duration)%24;
     }
     
-    public float convertTime(float time){
-        int timeInt = (int) time;
-        float timeDec = time - timeInt;
-        float hourInMS = timeInt * 3600000;
-        float oneMinInMS = 60000;
-        if(timeDec == 0){
-            return hourInMS;
-        } else if(timeDec == 0.25){
-            return hourInMS + 15*oneMinInMS;
-        } else if(timeDec == 0.5){
-            return hourInMS + 30*oneMinInMS;
-        } else if(timeDec == 0.75){
-            return hourInMS + 45*oneMinInMS;
-        }
-    }
+    // public float convertTime(float time){
+        // int timeInt = (int) time;
+        // float timeDec = time - timeInt;
+        // float hourInMS = timeInt * 3600000;
+        // float oneMinInMS = 60000;
+        // if(timeDec == 0){
+            // return hourInMS;
+        // } else if(timeDec == 0.25){
+            // return hourInMS + 15*oneMinInMS;
+        // } else if(timeDec == 0.5){
+            // return hourInMS + 30*oneMinInMS;
+        // } else if(timeDec == 0.75){
+            // return hourInMS + 45*oneMinInMS;
+        // }
+    // }
 }

@@ -194,9 +194,15 @@ public class Model
             if(!(newTask instanceof RecurringTask) && !(existingTask instanceof RecurringTask)){
                 System.out.println("Neither task is recurring");
                 //check overlap of dates first
-                //newTask ends before or on the same day existingTask starts (cases b, c, d)
-                if(newTaskEndDate.compareTo(existingTaskStartDate)<=0){
-                   System.out.println("NEWTASK ends before or on existingTask's date");
+                
+                //cover case a
+                //and cover case f?
+                
+                //newTask starts before or on the same day existingTask starts (cases b, c, d)
+                if((newTaskStartDate.compareTo(existingTaskStartDate)<=0) 
+                        //newTask firmly ends before existingTask starts
+                        && !(newTaskEndDate.after(existingTaskStartDate))){ 
+                   System.out.println("NEWTASK starts before or on existingTask's date");
                     //OVERLAP: newTask ends during or after existingTask starts
                    //No overlap: newTask ends before existingTask starts
                     if(newTaskEndTime > existingTaskStartTime){
