@@ -1,5 +1,3 @@
-package PSS_CS3560;
-
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -9,7 +7,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import java.nio.file.Path;
-//import java.lang.String;
 
 public class Controller
 {
