@@ -139,6 +139,7 @@ public class Model
         String newName = newTask.getName();
         String existingName;
         
+        
         //temp variable for existing Tasks in listOfTask
         Task existingTask;
         
