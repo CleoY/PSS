@@ -306,7 +306,7 @@ public class Model
                 }
                 
                 // Overlap with another anti-task
-                if (list OfTask.get(i) instanceof AntiTask) {
+                if (listOfTask.get(i) instanceof AntiTask) {
                     AntiTask atTask = (AntiTask)listOfTask.get(i);
                     if (atTask.getDate() == aTask.getDate()) {
                         return false;
