@@ -9,37 +9,53 @@ public class mainTester
     public static void main(String[] args) throws ParseException{
         
         
+        AntiTask aTask = new AntiTask("anti","antiType",9,4f,20220509);
+        AntiTask aTask2 = new AntiTask("anti2","antiType",5,3f,20220509);
         
-        AntiTask aTask = new AntiTask("anti","antiType",7,1f,20220509);
-        TransientTask tTask = new TransientTask("trans","transType",3,3f,20220509);
+        
+        TransientTask tTask = new TransientTask("trans","transType",8,4f,20220509); //existing task
+        TransientTask tTask2 = new TransientTask("trans2","transType",4,3f,20220509); //new task
+        
+        
         
         RecurringTask rTask = new RecurringTask("rec1","RecType",5,3,20220427, 20220602,1);
-        
-        Date antiDate = aTask.getStartDateObject();
-        System.out.println("Anti start: "+ antiDate);
-        Date antiEndDate = aTask.getEndDateObject();
-        System.out.println("Anti end: "+antiEndDate);
-        
-        float aStartTime = aTask.getStartTime();
-        System.out.println("Start time1: "+aStartTime);
-        float aEndTime = aTask.getEndTime();
-        System.out.println("End time1: "+aEndTime);
-        
-        Date transDate = tTask.getStartDateObject();
-        System.out.println("Trans start: "+ transDate);
-        Date transEndDate = tTask.getEndDateObject();
-        System.out.println("Trans end: "+transEndDate);
+    
         
         float tStartTime = tTask.getStartTime();
-        System.out.println("Start time2: "+tStartTime);
+        System.out.println("Start time1: "+tStartTime);
         float tEndTime = tTask.getEndTime();
-        System.out.println("End time2: "+tEndTime);
+        System.out.println("End time1: "+tEndTime);   
         
+        float tStartTime2 = tTask2.getStartTime();
+        System.out.println("Start time2: "+tStartTime2);
+        float tEndTime2 = tTask2.getEndTime();
+        System.out.println("End time2: "+tEndTime2);  
         
-        
-        listOfTask.add(aTask); //existing task
-        boolean ovie = checkOverlap(tTask); //new task
+        listOfTask.add(tTask); //existing task
+        boolean ovie = checkOverlap(tTask2); //new task
         System.out.println("Check overlap: "+ovie);
+        
+        
+        // Date antiDate = aTask.getStartDateObject();
+        // System.out.println("Anti start: "+ antiDate);
+        // Date antiEndDate = aTask.getEndDateObject();
+        // System.out.println("Anti end: "+antiEndDate);
+        
+        // Date transDate = tTask.getStartDateObject();
+        // System.out.println("Trans start: "+ transDate);
+        // Date transEndDate = tTask.getEndDateObject();
+        // System.out.println("Trans end: "+transEndDate);
+        
+        
+        // float aStartTime = aTask.getStartTime();
+        // System.out.println("Start time1: "+aStartTime);
+        // float aEndTime = aTask.getEndTime();
+        // System.out.println("End time1: "+aEndTime);
+        
+        // float aStartTime2 = aTask2.getStartTime();
+        // System.out.println("Start time2: "+aStartTime2);
+        // float aEndTime2 = aTask2.getEndTime();
+        // System.out.println("End time2: "+aEndTime2);     
         
         
         // float startTime = rTask.getStartTime();
