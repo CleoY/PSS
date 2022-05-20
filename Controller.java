@@ -6,7 +6,6 @@ import java.io.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 /**
  * Write a description of class Controller here.
@@ -627,8 +626,8 @@ public class Controller
                     System.out.println("File name does not exists. Please try again.");
                 } catch (IOException e) {
                     e.printStackTrace();
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                } catch (org.json.simple.parser.ParseException e) {
+                    throw new RuntimeException(e);
                 }
 
                 break;
