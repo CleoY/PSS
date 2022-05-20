@@ -2,6 +2,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.*;
+import java.io.*;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  * Write a description of class Controller here.
@@ -9,6 +14,7 @@ import java.util.*;
  * @author (your name)
  * @version (a version number or a date)
  */
+
 public class Controller
 {
     public Controller() {}
@@ -574,7 +580,57 @@ public class Controller
                 break;
             // Read schedule
             case 6:
-                
+                System.out.println("Please enter the name of the JSON file (including .json): ");
+                String fileName = scan.nextLine();
+                JSONParser jsonParser = new JSONParser();
+                try (FileReader reader = new FileReader(fileName)) {
+                    Object obj = jsonParser.parse(reader);
+
+                    JSONArray taskList = (JSONArray) obj;
+
+                    System.out.println("Tasks read in from file...");
+                    Model tempModel = new Model();
+                    boolean readOkay = true;
+                    boolean finalCheck = true;
+                    //taskList.forEach(tsk -> parseTaskObject( (JSONObject) tsk, tempModel));
+                    for (Object tsk : taskList) {
+                        if (!parseTaskObject((JSONObject) tsk, tempModel)) {
+                            readOkay = false;
+                        }
+                    }
+                    Model copyModel = model;
+                    if (!readOkay) {
+                        System.out.println("The json file had an error! Please recheck your file input. Rejecting all changes.");
+                    } else {
+                        for (Task task: tempModel.getTaskList()){
+                            try {
+                                if (task instanceof RecurringTask) {
+                                    RecurringTask rTask = (RecurringTask) task;
+                                    copyModel.createRecurringTask(task.getName(), task.getType(), task.getStartTime(), task.getDuration(), rTask.getStartDate(), rTask.getEndDate(), rTask.getFrequency());
+                                } else if (task instanceof TransientTask) {
+                                    TransientTask tTask = (TransientTask) task;
+                                    copyModel.createTransientTask(task.getName(), task.getType(), task.getStartTime(), task.getDuration(), tTask.getDate());
+                                } else {
+                                    AntiTask aTask = (AntiTask) task;
+                                    copyModel.createAntiTask(task.getName(), task.getType(), task.getStartTime(), task.getDuration(), aTask.getDate());
+                                }
+                            } catch (Exception e) {
+                                System.out.println("The json file had an error! Please recheck your file input. Rejecting all changes.");
+                                finalCheck = false;
+                            }
+                        }
+                        if (finalCheck) {
+                            model = copyModel;
+                        }
+                    }
+                } catch (FileNotFoundException e) {
+                    System.out.println("File name does not exists. Please try again.");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
                 break;
             // View schedule
             case 7:
@@ -599,5 +655,34 @@ public class Controller
         if (input == 0) {
             System.out.println("*** Thank you and have a great day! ***");
         }
+    }
+
+    private static boolean parseTaskObject(JSONObject task, Model tempModel) {
+        try {
+            String taskName = (String) task.get("Name");
+            String taskType = (String) task.get("Type");
+            if (taskType.matches("Class|Study|Sleep|Exercise|Work|Meal")) {
+                int taskSD = (int) (long) task.get("StartDate");
+                float taskST = (float) (double) task.get("StartTime");
+                float taskD = (float) (double) task.get("Duration");
+                int taskED = (int) (long) task.get("EndDate");
+                int taskF = (int) (long) task.get("Frequency");
+                tempModel.createRecurringTask(taskName, taskType, taskST, taskD, taskSD, taskED, taskF);
+                // throw exception if overlap detected within these tasks itself, reject read
+            } else {
+                int taskDate = (int) (long) task.get("Date");
+                float taskST = (float) (double) task.get("StartTime");
+                float taskD = (float) (double) task.get("Duration");
+                if (taskType.equals("Cancellation")) {
+                    tempModel.createAntiTask(taskName, taskType, taskST, taskD, taskDate);
+                } else {
+                    tempModel.createTransientTask(taskName, taskType, taskST, taskD, taskDate);
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+
     }
 }
