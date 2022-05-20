@@ -603,7 +603,7 @@ public class Controller
     
     private int getEndDate(float startDate) {
         Scanner scan = new Scanner(System.in);
-        System.out.println("Please enter a start date in the format YYYYMMDD: ");
+        System.out.println("Please enter an end date in the format YYYYMMDD: ");
         int endDate = Integer.parseInt(scan.nextLine());
         while (endDate < startDate) {
             System.out.println("Invalid input: End date must be after start date. Please try again: ");
