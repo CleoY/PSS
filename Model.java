@@ -297,13 +297,6 @@ public class Model
                         }
                     }
                 }
-                // Overlap with transient task
-                if (listOfTask.get(i) instanceof TransientTask) {
-                    TransientTask tTask = (TransientTask)listOfTask.get(i);
-                    if (tTask.getDate() == aTask.getDate()) {
-                        return false;    
-                    }
-                }
                 
                 // Overlap with another anti-task
                 if (listOfTask.get(i) instanceof AntiTask) {
