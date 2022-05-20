@@ -162,6 +162,9 @@ public class Model
         float newTaskDuration;
         float existingTaskDuration;
         
+        int newTaskFrequency=0; //only if newTask is recurring
+        int existingTaskFrequency=0; //only if existingTask is recurring
+        
         int overlapCounter=0;
         
         //check for name overlap
@@ -219,9 +222,35 @@ public class Model
                 }else{
                     System.out.println("The tasks are not on the same day.");
                 }
+            } else {
+                System.out.println("At least one task is recurring");
+                if(newTask instanceof RecurringTask){
+                    newTaskFrequency = ((RecurringTask)newTask).getFrequency();
+                }
+                if(existingTask instanceof RecurringTask){
+                    existingTaskFrequency = ((RecurringTask)existingTask).getFrequency();
+                }
+                
+                //one or both are DAILY recurring tasks
+                if(newTaskFrequency + existingTaskFrequency <= 2){
+                    
+                } 
+                //ONE weekly + 1 daily/anti/trans
+                else if(newTaskFrequency + existingTaskFrequency <= 8){
+                    
+                }
+                //2 weekly since sum > 8
+                else{
+                    
+                }
+                
+                
             }
+            // if(newTask instanceof RecurringTask){
+                // get frequency
+            // }
+            // if freq = 1 and other task is NOT weekly
         }
-        
         
         return false;
     }
