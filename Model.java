@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -141,6 +142,28 @@ public class Model
             }
         }
         return true;
+    }
+
+    public ArrayList<Task> getTasksInRange(int startDate, int endDate) throws ParseException {
+        SimpleDateFormat dateParser = new SimpleDateFormat("yyyyMMdd");
+        Date start = dateParser.parse(""+startDate);
+        Date end = dateParser.parse(""+endDate);
+        ArrayList<Task> tasks = new ArrayList<Task>();
+
+        for (int i = 0; i < listOfTask.size(); i++){
+            if (listOfTask.get(i).startDateObject.equals(start) || listOfTask.get(i).startDateObject.after(start)) {
+                if (listOfTask.get(i) instanceof RecurringTask) {
+                    if (listOfTask.get(i).startDateObject.equals(end) || listOfTask.get(i).startDateObject.before(end)){
+                        tasks.add(listOfTask.get(i));
+                    }
+                } else {
+                    if (listOfTask.get(i).endDateObject.equals(end) || listOfTask.get(i).endDateObject.before(end)) {
+                        tasks.add(listOfTask.get(i));
+                    }
+                }
+            }
+        }
+        return tasks;
     }
     
     private boolean checkOverlap(Task newTask){
