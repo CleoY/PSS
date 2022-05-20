@@ -1,0 +1,24 @@
+#BlueJ class context
+comment0.target=Model
+comment0.text=\n\ Write\ a\ description\ of\ class\ Model\ here.\n\n\ @author\ (your\ name)\n\ @version\ (a\ version\ number\ or\ a\ date)\n
+comment1.params=
+comment1.target=Model()
+comment10.params=name
+comment10.target=Task\ findTaskFromNameBinarySearch(java.lang.String)
+comment2.params=name\ type\ startTime\ duration\ startDate\ endDate\ frequency
+comment2.target=boolean\ createRecurringTask(java.lang.String,\ java.lang.String,\ float,\ float,\ int,\ int,\ int)
+comment3.params=name\ type\ startTime\ duration\ date
+comment3.target=boolean\ createTransientTask(java.lang.String,\ java.lang.String,\ float,\ float,\ int)
+comment4.params=name\ type\ startTime\ duration\ date
+comment4.target=boolean\ createAntiTask(java.lang.String,\ java.lang.String,\ float,\ float,\ int)
+comment5.params=
+comment5.target=java.util.ArrayList\ getTaskList()
+comment6.params=newTask
+comment6.target=void\ addTask(Task)
+comment7.params=name
+comment7.target=int\ findTask(java.lang.String)
+comment8.params=name
+comment8.target=java.lang.Boolean\ deleteTask(java.lang.String)
+comment9.params=newTask
+comment9.target=boolean\ checkOverlap(Task)
+numComments=11
