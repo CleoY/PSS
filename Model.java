@@ -42,9 +42,7 @@ public class Model
     
     public boolean createAntiTask(String name, String type, float startTime, float duration, int date) throws ParseException{
         AntiTask myTask = new AntiTask(name, type, startTime, duration, date);
-        // check overlap
-        // if not overlap, add to list, return true
-        if (!checkOverlap(myTask)) {
+        if (findAssociatedRecurringTask(myTask)) {
             addTask(myTask);
             return true;
         }
@@ -259,5 +257,52 @@ public class Model
     }
     private Task findTaskFromNameBinarySearch(String name){
         return null;
+    }
+    
+    private boolean findAssociatedRecurringTask(AntiTask aTask) throws ParseException{
+        for (int i = 0; i < listOfTask.size(); ++i) {
+            // Find a recurring task with same start time
+            if (listOfTask.get(i).getStartTime() == aTask.getStartTime() && listOfTask.get(i) instanceof RecurringTask) {
+                // Recurring Task case
+                if (listOfTask.get(i) instanceof RecurringTask) {
+                    RecurringTask rTask = (RecurringTask)listOfTask.get(i);
+                    int startDate = rTask.getStartDate();
+                    int endDate = rTask.getEndDate();
+                    int date = aTask.getDate();
+                
+                    if (date == startDate || date == endDate) {
+                        return true;
+                    }
+                    else if (date < startDate || date > endDate) {
+                        return false;
+                    }
+                    else {
+                        // If anti-task is in the range of recurring task
+                        int frequency = rTask.getFrequency();
+                        String startDateStr = Integer.toString(startDate);
+                        String endDateStr = Integer.toString(endDate);
+                        String dateStr = Integer.toString(date);
+                        String instanceDate = "";
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+                        Calendar calendarDate = new GregorianCalendar();
+                        calendarDate.setTime(dateFormat.parse(startDateStr));
+                        while (!instanceDate.equals(endDateStr) && !instanceDate.equals(dateStr)) {
+                            calendarDate.add(Calendar.DATE, frequency);
+                            // Convert to String
+                            instanceDate = dateFormat.format(calendarDate.getTime());
+                        }
+                    
+                        if (instanceDate.equals(dateStr)) {
+                            return true;
+                        }
+                    }
+                }
+                // Overlapped transient task and anti-task
+                if (listOfTask.get(i) instanceof TransientTask && listOfTask.get(i).getStartTime() == aTask.getStartTime()) {
+                    return false;
+                }
+            }
+        }
+        return false;
     }
 }
