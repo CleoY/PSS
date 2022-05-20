@@ -272,7 +272,7 @@ private boolean findAssociatedRecurringTask(AntiTask aTask) throws ParseExceptio
                     int date = aTask.getDate();
                 
                     if (date == startDate || date == endDate) {
-                        return true;
+                        found = true;
                     }
                     else if (date < startDate || date > endDate) {
                         return false;
