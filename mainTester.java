@@ -10,8 +10,9 @@ public class mainTester
         
         
         
-        AntiTask aTask = new AntiTask("anti","antiType",23,8f,20220508);
+        AntiTask aTask = new AntiTask("anti","antiType",7,1f,20220509);
         TransientTask tTask = new TransientTask("trans","transType",3,3f,20220509);
+        
         RecurringTask rTask = new RecurringTask("rec1","RecType",5,3,20220427, 20220602,1);
         
         Date antiDate = aTask.getStartDateObject();
@@ -36,8 +37,8 @@ public class mainTester
         
         
         
-        listOfTask.add(tTask);
-        boolean ovie = checkOverlap(aTask);
+        listOfTask.add(aTask); //existing task
+        boolean ovie = checkOverlap(tTask); //new task
         System.out.println("Check overlap: "+ovie);
         
         
@@ -142,8 +143,8 @@ public class mainTester
         Date newTaskStartDate;
         Date existingTaskStartDate;
         
-        Date newTaskEndDate; //could be same day as startDate
-        Date existingTaskEndDate;
+        //Date newTaskEndDate; //could be same day as startDate
+        //Date existingTaskEndDate;
         
         //times
         float newTaskStartTime;
@@ -153,6 +154,8 @@ public class mainTester
         
         float newTaskDuration;
         float existingTaskDuration;
+        
+        int overlapCounter=0;
         
         //check for name overlap
         for(int i=0; i<listOfTask.size(); i++){
@@ -166,18 +169,18 @@ public class mainTester
         // get type, startDate, endDate, startTime, endTime, and duration of newTask
         newTaskType = newTask.getType();
         newTaskStartDate = newTask.getStartDateObject();
-        newTaskEndDate = newTask.getEndDateObject();
+        //newTaskEndDate = newTask.getEndDateObject();
         newTaskStartTime = newTask.getStartTime();
         newTaskEndTime = newTask.getEndTime();
         newTaskDuration = newTask.getDuration();
         
         for(int j=0; j<listOfTask.size(); j++){
             existingTask = listOfTask.get(j);
-            
+            overlapCounter = 0;
             //get existing task's type, date(s), startTime, and duration
             existingTaskType = existingTask.getType();
             existingTaskStartDate = existingTask.getStartDateObject();
-            existingTaskEndDate = existingTask.getEndDateObject();
+            //existingTaskEndDate = existingTask.getEndDateObject();
             existingTaskStartTime = existingTask.getStartTime();
             existingTaskEndTime = existingTask.getEndTime();
             existingTaskDuration = existingTask.getDuration();
@@ -186,28 +189,29 @@ public class mainTester
             if(!(newTask instanceof RecurringTask) && !(existingTask instanceof RecurringTask)){
                 System.out.println("Neither task is recurring");
                 //check overlap of dates first
-                //newTask ends before or on the same day existingTask starts (cases b, c, d)
-                if(newTaskEndDate.compareTo(existingTaskStartDate)<=0){
-                   System.out.println("NEWTASK ends before or on existingTask's date");
-                    //OVERLAP: newTask ends during or after existingTask starts
-                   //No overlap: newTask ends before existingTask starts
-                    if(newTaskEndTime > existingTaskStartTime){
-                        System.out.println("NEWTASK ends during or after existingTask");
-                       return true;
-                   }
-                }
-                //newTask starts on or after the same day existingTask ends
-                //REVERSE: existing Task ends before or on same day newTask starts (cases e, g, h)
-                else if(newTaskStartDate.compareTo(existingTaskEndDate)>=0){
-                    
-                    //existingTaskEndDate.compareTo(newTaskStartDate)<=0){
-                    System.out.println("EXISTINGTASK ends before or on newTask's date");
-                    //OVERLAP: existingTask ends during or after newTask starts
-                    //No overlap: existingTask ends before newTask starts
-                    if(existingTaskEndTime > newTaskStartTime){
-                        System.out.println("EXISTINGTASK ends during or after newTask");
-                        return true;
+                if (newTaskStartDate.equals(existingTaskStartDate)){
+                    //cases 1 and 3
+                    if((newTaskStartTime <= existingTaskStartTime) && (newTaskEndTime > existingTaskStartTime)){
+                        System.out.println("Case 1 or 3");
+                        overlapCounter++;
+                    } else if((newTaskStartTime >= existingTaskStartTime) && (newTaskStartTime < existingTaskEndTime)){
+                        System.out.println("Case 2 or 4");
+                        overlapCounter++;
                     }
+                    
+                    //need to check Task types before returning true
+                    //cannot return false until all Tasks in listOfTask have been checked
+                    if(overlapCounter > 0){
+                        System.out.println("newTask is Trans?: "+ (newTask instanceof TransientTask));
+                        System.out.println("existingTask is Anti?: "+ (existingTask instanceof AntiTask));
+                        
+                        if(!((newTask instanceof TransientTask) && (existingTask instanceof AntiTask))){
+                            System.out.println("Not Trans & Anti combo");
+                            return true;
+                        }
+                    }
+                }else{
+                    System.out.println("The tasks are not on the same day.");
                 }
             }
         }
