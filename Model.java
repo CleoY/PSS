@@ -262,7 +262,7 @@ public class Model
     private boolean findAssociatedRecurringTask(AntiTask aTask) throws ParseException{
         for (int i = 0; i < listOfTask.size(); ++i) {
             // Find a recurring task with same start time
-            if (listOfTask.get(i).getStartTime() == aTask.getStartTime() && listOfTask.get(i) instanceof RecurringTask) {
+            if (listOfTask.get(i).getStartTime() == aTask.getStartTime()) {
                 // Recurring Task case
                 if (listOfTask.get(i) instanceof RecurringTask) {
                     RecurringTask rTask = (RecurringTask)listOfTask.get(i);
