@@ -262,7 +262,7 @@ public class Model
 private boolean findAssociatedRecurringTask(AntiTask aTask) throws ParseException{
         boolean found = false;
         for (int i = 0; i < listOfTask.size(); ++i) {
-            // Find a recurring task with same start time
+            // Find a task with same start time
             if (listOfTask.get(i).getStartTime() == aTask.getStartTime()) {
                 // Recurring Task case
                 if (listOfTask.get(i) instanceof RecurringTask) {
@@ -306,6 +306,10 @@ private boolean findAssociatedRecurringTask(AntiTask aTask) throws ParseExceptio
                         return false;
                     }
                 }
+                
+                // Does not check for overlapped transient
+                // because there should not be a transient task
+                // in recurring task range
             }
         }
         return found;
