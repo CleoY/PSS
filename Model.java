@@ -297,9 +297,20 @@ public class Model
                         }
                     }
                 }
-                // Overlapped transient task and anti-task
-                if (listOfTask.get(i) instanceof TransientTask && listOfTask.get(i).getStartTime() == aTask.getStartTime()) {
-                    return false;
+                // Overlap with transient task
+                if (listOfTask.get(i) instanceof TransientTask) {
+                    TransientTask tTask = (TransientTask)listOfTask.get(i);
+                    if (tTask.getDate() == aTask.getDate()) {
+                        return false;    
+                    }
+                }
+                
+                // Overlap with another anti-task
+                if (list OfTask.get(i) instanceof AntiTask) {
+                    AntiTask atTask = (AntiTask)listOfTask.get(i);
+                    if (atTask.getDate() == aTask.getDate()) {
+                        return false;
+                    }
                 }
             }
         }
