@@ -259,7 +259,8 @@ public class Model
         return null;
     }
     
-    private boolean findAssociatedRecurringTask(AntiTask aTask) throws ParseException{
+private boolean findAssociatedRecurringTask(AntiTask aTask) throws ParseException{
+        boolean found = false;
         for (int i = 0; i < listOfTask.size(); ++i) {
             // Find a recurring task with same start time
             if (listOfTask.get(i).getStartTime() == aTask.getStartTime()) {
@@ -293,7 +294,7 @@ public class Model
                         }
                     
                         if (instanceDate.equals(dateStr)) {
-                            return true;
+                            found = true;
                         }
                     }
                 }
@@ -307,6 +308,6 @@ public class Model
                 }
             }
         }
-        return false;
+        return found;
     }
 }
