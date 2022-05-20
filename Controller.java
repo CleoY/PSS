@@ -147,7 +147,7 @@ public class Controller
                 
                 if (choice == 1) {
                     // Get start date
-                    System.out.println("Please enter a start date in the format MMDDYYYY: ");
+                    System.out.println("Please enter a start date in the format YYYYMMDD: ");
                     int startDate = Integer.parseInt(scan.nextLine());
                     // Need more check
                     while (startDate < 0) {
@@ -157,7 +157,7 @@ public class Controller
                     
                     
                     // Get end date
-                    System.out.println("Please enter a start date in the format MMDDYYYY: ");
+                    System.out.println("Please enter a start date in the format YYYYMMDD: ");
                     int endDate = Integer.parseInt(scan.nextLine());
                     while (endDate < startDate) {
                         System.out.println("Invalid input: End date must be after start date. Please try again: ");
@@ -181,7 +181,7 @@ public class Controller
                 }
                 else if (choice == 2) {
                     // Get date
-                    System.out.println("Please enter a date in the format MMDDYYYY: ");
+                    System.out.println("Please enter a date in the format YYYYMMDD: ");
                     int date = Integer.parseInt(scan.nextLine());
                     while (date < 0) {
                         System.out.println("Invalid input. Please try again: ");
@@ -197,7 +197,7 @@ public class Controller
                 }
                 else {
                     // Get date
-                    System.out.println("Please enter a date in the format MMDDYYYY: ");
+                    System.out.println("Please enter a date in the format YYYYMMDD: ");
                     int date = Integer.parseInt(scan.nextLine());
                     while (date < 0) {
                         System.out.println("Invalid input. Please try again: ");
