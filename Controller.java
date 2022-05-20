@@ -37,14 +37,7 @@ public class Controller
         Model model = new Model();
         Scanner scan = new Scanner(System.in);
         int input = Integer.parseInt(scan.nextLine());
-        
-        while (input != 0 ) {
-            switch (input) {
-            // Create task
-            Model model = new Model();
-        Scanner scan = new Scanner(System.in);
-        int input = Integer.parseInt(scan.nextLine());
-        
+
         while (input != 0 ) {
             switch (input) {
             // Create task
