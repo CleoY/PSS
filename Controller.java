@@ -1,3 +1,5 @@
+package PSS_CS3560;
+
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -7,6 +9,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import java.nio.file.Path;
+//import java.lang.String;
 
 public class Controller
 {
@@ -274,13 +277,15 @@ public class Controller
                     System.out.println("Please choose an option on what you want written to a file:");
 
                     System.out.println("\n1 - Write entire schedule to file");
-                    System.out.println("2 - Write a given task to file");
+                    System.out.println("2 - Write a day's schedule to file");
+                    System.out.println("3 - Write a week's schedule to file");
+                    System.out.println("4 - Write a month's schedule to file");
 
                     System.out.println("\nEnter your choice: ");
 
                     int userChoice = Integer.parseInt(scan.nextLine());
 
-                    while (userChoice != 1 && userChoice != 2)
+                    while (userChoice != 1 && userChoice != 2 && userChoice !=3 && userChoice !=4)
                     {
                         System.out.println("Invalid option. Please choose a valid option: ");
                         userChoice = Integer.parseInt(scan.nextLine());
@@ -299,18 +304,236 @@ public class Controller
                     }
                     else if (userChoice == 2)
                     {
-                        System.out.println("test");
-                    }
+                        System.out.println("Please enter a date in the format YYYYMMDD and tasks from that date will be written to file: ");
+                        int date = Integer.parseInt(scan.nextLine());
 
-                    /**try
+                        while (date < 0)    // user inputs invalid date
+                        {
+                            System.out.println("Invalid input. Please try again: ");
+                            date = Integer.parseInt(scan.nextLine());
+                        }
+
+                        Model filteredModel = new Model();  // initialize new model
+
+                        for (Task task: model.getTaskList())
+                        {
+                            if (task instanceof RecurringTask)
+                            {
+                                RecurringTask rTask = (RecurringTask) task;
+
+                                if (rTask.getStartDate() == date)   // if recurring task's date equals user's selected date
+                                {
+                                    filteredModel.createRecurringTask(rTask.getName(), rTask.getType(), rTask.getStartTime(), rTask.getDuration(), rTask.getStartDate(), rTask.getEndDate(), rTask.getFrequency()); // add recurring task to filtered model
+                                }
+                            }
+                            else if (task instanceof AntiTask)
+                            {
+                                AntiTask aTask = (AntiTask) task;
+
+                                if (aTask.getDate() == date)   // if antitask's date equals user's selected date
+                                {
+                                    filteredModel.createAntiTask(aTask.getName(), aTask.getType(), aTask.getStartTime(), aTask.getDuration(), aTask.getDate()); // add antitask to filtered model
+                                }
+                            }
+                            else if (task instanceof TransientTask)
+                            {
+                                TransientTask tTask = (TransientTask) task;
+
+                                if (tTask.getDate() == date)   // if transient task's date equals user's selected date
+                                {
+                                    filteredModel.createTransientTask(tTask.getName(), tTask.getType(), tTask.getStartTime(), tTask.getDuration(), tTask.getDate()); // add transient task to filtered model
+                                }
+                            }
+                        }
+
+                        if (filteredModel.getTaskList().size() != 0)    // if filteredModel size is not 0 (tasks with given date were found)
+                        {
+                            try
+                            {
+                                writeToFile(scan, filteredModel);   // write tasks contained in filtered model to file
+                            }
+                            catch (IOException e)
+                            {
+                                e.printStackTrace();
+                            }
+                        }
+                        else    // task with given date were not found
+                        {
+                            System.out.println("There exists no tasks with the given date to write to file.");
+                        }
+
+                    }   // end user choice 2
+                    else if (userChoice == 3)
                     {
+                        System.out.println("Please enter a date in the format YYYYMMDD that will be the first day of the week: ");
+                        int userDate = Integer.parseInt(scan.nextLine());
 
-                    }
-                    catch
+                        while (userDate < 0)    // user inputs invalid date
+                        {
+                            System.out.println("Invalid input. Please try again: ");
+                            userDate = Integer.parseInt(scan.nextLine());
+                        }
+
+                        String userStrDate = Integer.toString(userDate);    // converts user-inputted date to string
+                        int year = Integer.parseInt(userStrDate.substring(0, 4));   // extract year from date using substring method
+                        int month = Integer.parseInt(userStrDate.substring(4, 6));
+                        int day = Integer.parseInt(userStrDate.substring(6));
+
+                        Model filteredModel = new Model();  // initialize new model
+
+                        for (Task task: model.getTaskList())
+                        {
+                            if (task instanceof RecurringTask)
+                            {
+                                RecurringTask rTask = (RecurringTask) task;
+
+                                String rTaskStrYear = Integer.toString(rTask.getStartDate()).substring(0, 4);
+                                int rTaskYear = Integer.parseInt(rTaskStrYear);
+                                String rTaskStrMonth = Integer.toString(rTask.getStartDate()).substring(4, 6);
+                                int rTaskMonth = Integer.parseInt(rTaskStrMonth);
+                                String rTaskStrDay = Integer.toString(rTask.getStartDate()).substring(6);
+                                int rTaskDay = Integer.parseInt(rTaskStrDay);
+
+                                if (rTaskYear == year && rTaskMonth == month && rTaskDay >= day && rTaskDay <= (day + 6))   // if recurring task's month and year equal user selected month and year and within week range
+                                {
+                                    filteredModel.createRecurringTask(rTask.getName(), rTask.getType(), rTask.getStartTime(), rTask.getDuration(), rTask.getStartDate(), rTask.getEndDate(), rTask.getFrequency()); // add recurring task to filtered model
+                                }
+                            }
+                            else if (task instanceof AntiTask)
+                            {
+                                AntiTask aTask = (AntiTask) task;
+
+                                String aTaskStrYear = Integer.toString(aTask.getDate()).substring(0, 4);
+                                int aTaskYear = Integer.parseInt(aTaskStrYear);
+                                String aTaskStrMonth = Integer.toString(aTask.getDate()).substring(4, 6);
+                                int aTaskMonth = Integer.parseInt(aTaskStrMonth);
+                                String aTaskStrDay = Integer.toString(aTask.getDate()).substring(6);
+                                int aTaskDay = Integer.parseInt(aTaskStrDay);
+
+
+                                if (aTaskYear == year && aTaskMonth == month && aTaskDay >= day && aTaskDay <= (day + 6))
+                                {
+                                    filteredModel.createAntiTask(aTask.getName(), aTask.getType(), aTask.getStartTime(), aTask.getDuration(), aTask.getDate()); // add antitask to filtered model
+                                }
+                            }
+                            else if (task instanceof TransientTask)
+                            {
+                                TransientTask tTask = (TransientTask) task;
+
+                                String tTaskStrYear = Integer.toString(tTask.getDate()).substring(0, 4);
+                                int tTaskYear = Integer.parseInt(tTaskStrYear);
+                                String tTaskStrMonth = Integer.toString(tTask.getDate()).substring(4, 6);
+                                int tTaskMonth = Integer.parseInt(tTaskStrMonth);
+                                String tTaskStrDay = Integer.toString(tTask.getDate()).substring(6);
+                                int tTaskDay = Integer.parseInt(tTaskStrDay);
+
+                                if (tTaskYear == year && tTaskMonth == month && tTaskDay >= day && tTaskDay <= (day + 6))   // if transient task's date equals user's selected date
+                                {
+                                    filteredModel.createTransientTask(tTask.getName(), tTask.getType(), tTask.getStartTime(), tTask.getDuration(), tTask.getDate()); // add transient task to filtered model
+                                }
+                            }
+                        }   // end for loop
+
+                        if (filteredModel.getTaskList().size() != 0)    // if filteredModel size is not 0
+                        {
+                            try
+                            {
+                                writeToFile(scan, filteredModel);   // write tasks contained in filtered model to file
+                            }
+                            catch (IOException e)
+                            {
+                                e.printStackTrace();
+                            }
+                        }
+                        else    // task with given date were not found
+                        {
+                            System.out.println("There exists no tasks with the given date to write to file.");
+                        }
+                    }   // end user choice 3
+                    else if (userChoice == 4)
                     {
+                        System.out.println("Please enter a year for the month you want written to file:");
+                        int userYear = Integer.parseInt(scan.nextLine());
 
-                    }*/
+                        while (userYear < 0)    // user inputs invalid date
+                        {
+                            System.out.println("Invalid input. Please try again: ");
+                            userYear = Integer.parseInt(scan.nextLine());
+                        }
 
+                        System.out.println("Please enter a month:");
+                        int userMonth = Integer.parseInt(scan.nextLine());
+
+                        while (userMonth < 1 || userMonth > 12)    // user inputs invalid date outside of range of 1-12
+                        {
+                            System.out.println("Invalid input. Please input a month within range of 1-12: ");
+                            userMonth = Integer.parseInt(scan.nextLine());
+                        }
+
+                        Model filteredModel = new Model();  // initialize new model
+
+                        for (Task task: model.getTaskList())
+                        {
+                            if (task instanceof RecurringTask)
+                            {
+                                RecurringTask rTask = (RecurringTask) task;
+
+                                String rTaskStrYear = Integer.toString(rTask.getStartDate()).substring(0, 4);
+                                int rTaskYear = Integer.parseInt(rTaskStrYear);
+                                String rTaskStrMonth = Integer.toString(rTask.getStartDate()).substring(4, 6);
+                                int rTaskMonth = Integer.parseInt(rTaskStrMonth);
+
+                                if (rTaskYear == userYear && rTaskMonth == userMonth)   // if recurring task's month and year equal user selected month and year
+                                {
+                                    filteredModel.createRecurringTask(rTask.getName(), rTask.getType(), rTask.getStartTime(), rTask.getDuration(), rTask.getStartDate(), rTask.getEndDate(), rTask.getFrequency()); // add recurring task to filtered model
+                                }
+                            }
+                            else if (task instanceof AntiTask)
+                            {
+                                AntiTask aTask = (AntiTask) task;
+
+                                String aTaskStrYear = Integer.toString(aTask.getDate()).substring(0, 4);
+                                int aTaskYear = Integer.parseInt(aTaskStrYear);
+                                String aTaskStrMonth = Integer.toString(aTask.getDate()).substring(4, 6);
+                                int aTaskMonth = Integer.parseInt(aTaskStrMonth);
+
+                                if (aTaskYear == userYear && aTaskMonth == userMonth)
+                                {
+                                    filteredModel.createAntiTask(aTask.getName(), aTask.getType(), aTask.getStartTime(), aTask.getDuration(), aTask.getDate()); // add antitask to filtered model
+                                }
+                            }
+                            else if (task instanceof TransientTask)
+                            {
+                                TransientTask tTask = (TransientTask) task;
+
+                                String tTaskStrYear = Integer.toString(tTask.getDate()).substring(0, 4);
+                                int tTaskYear = Integer.parseInt(tTaskStrYear);
+                                String tTaskStrMonth = Integer.toString(tTask.getDate()).substring(4, 6);
+                                int tTaskMonth = Integer.parseInt(tTaskStrMonth);
+
+                                if (tTaskYear == userYear && tTaskMonth == userMonth)   // if transient task's date equals user's selected date
+                                {
+                                    filteredModel.createTransientTask(tTask.getName(), tTask.getType(), tTask.getStartTime(), tTask.getDuration(), tTask.getDate()); // add transient task to filtered model
+                                }
+                            }
+                        }   // end for loop
+
+                        if (filteredModel.getTaskList().size() != 0)    // if filteredModel size is not 0
+                        {
+                            try
+                            {
+                                writeToFile(scan, filteredModel);   // write tasks contained in filtered model to file
+                            }
+                            catch (IOException e)
+                            {
+                                e.printStackTrace();
+                            }
+                        }
+                        else    // task with given date were not found
+                        {
+                            System.out.println("There exists no tasks with the given date to write to file.");
+                        }
+                    }   // end user choice 4
 
                     break;
                 // Read schedule
