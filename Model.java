@@ -1,3 +1,7 @@
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.*;
 
 /**
  * Write a description of class Model here.
@@ -5,9 +9,6 @@
  * @author (your name)
  * @version (a version number or a date)
  */
-
-import java.util.*;
-
 public class Model
 {
     private ArrayList<Task> listOfTask = new ArrayList<Task>();
@@ -16,7 +17,7 @@ public class Model
     
     // Create an object of RecurringTask
     // Create an object of RecurringTask
-    public boolean createRecurringTask(String name, String type, float startTime, float duration, int startDate, int endDate, int frequency) { 
+    public boolean createRecurringTask(String name, String type, float startTime, float duration, int startDate, int endDate, int frequency) throws ParseException{ 
         RecurringTask myTask = new RecurringTask(name, type, startTime, duration, startDate, endDate, frequency);
         // check overlap
         // if not overlap, add to list, return true
@@ -27,7 +28,7 @@ public class Model
         return false;
     }
     
-    public boolean createTransientTask(String name, String type, float startTime, float duration, int date) {
+    public boolean createTransientTask(String name, String type, float startTime, float duration, int date) throws ParseException{
         TransientTask myTask = new TransientTask(name, type, startTime, duration, date);
         // check overlap
         // if not overlap, add to list, return true
@@ -38,7 +39,7 @@ public class Model
         return false;
     }
     
-    public boolean createAntiTask(String name, String type, float startTime, float duration, int date) {
+    public boolean createAntiTask(String name, String type, float startTime, float duration, int date) throws ParseException{
         AntiTask myTask = new AntiTask(name, type, startTime, duration, date);
         // check overlap
         // if not overlap, add to list, return true
@@ -155,17 +156,22 @@ public class Model
         String existingTaskType;
         
         //dates
-        float newTaskStartDate;
-        float existingTaskStartDate;
+        Date newTaskStartDate;
+        Date existingTaskStartDate;
         
-        float newTaskEndDate; //could be same day as startDate
-        float existingTaskEndDate;
+        //Date newTaskEndDate; //could be same day as startDate
+        //Date existingTaskEndDate;
         
         //times
         float newTaskStartTime;
         float existingTaskStartTime;
+        float newTaskEndTime;
+        float existingTaskEndTime;
+        
         float newTaskDuration;
         float existingTaskDuration;
+        
+        int overlapCounter=0;
         
         //check for name overlap
         for(int i=0; i<listOfTask.size(); i++){
@@ -176,37 +182,52 @@ public class Model
             }
         }
         
-        // get startDate/date, startTime, duration, and type of newTask
+        // get type, startDate, endDate, startTime, endTime, and duration of newTask
         newTaskType = newTask.getType();
-        if(newTask instanceof TransientTask){
-            newTaskStartDate = ((TransientTask)newTask).getDate();
-            newTaskStartTime = ((TransientTask)newTask).getStartTime();
-            newTaskDuration = ((TransientTask)newTask).getDuration();
-            
-            // TransientTask newTransientTask = (TransientTask)newTask;
-            // newTaskStartDate = newTransientTask.getDate();
-            // newTaskStartTime = newTransientTask.getStartTime();
-            // newTaskDuration = newTransientTask.getDuration();
-        } else if (newTask instanceof RecurringTask){
-            newTaskStartDate = ((RecurringTask)newTask).getStartDate();
-            newTaskEndDate = ((RecurringTask)newTask).getEndDate();
-            newTaskStartTime = ((RecurringTask)newTask).getStartTime();
-            newTaskDuration = ((RecurringTask)newTask).getDuration();
-        } else{
-            newTaskStartDate = ((AntiTask)newTask).getDate();
-            newTaskStartTime = ((AntiTask)newTask).getStartTime();
-            newTaskDuration = ((AntiTask)newTask).getDuration();
-        }
+        newTaskStartDate = newTask.getStartDateObject();
+        //newTaskEndDate = newTask.getEndDateObject();
+        newTaskStartTime = newTask.getStartTime();
+        newTaskEndTime = newTask.getEndTime();
+        newTaskDuration = newTask.getDuration();
         
         for(int j=0; j<listOfTask.size(); j++){
-            //get existing task's type, date(s), startTime, and duration
             existingTask = listOfTask.get(j);
+            overlapCounter = 0;
+            //get existing task's type, date(s), startTime, and duration
             existingTaskType = existingTask.getType();
+            existingTaskStartDate = existingTask.getStartDateObject();
+            //existingTaskEndDate = existingTask.getEndDateObject();
+            existingTaskStartTime = existingTask.getStartTime();
+            existingTaskEndTime = existingTask.getEndTime();
+            existingTaskDuration = existingTask.getDuration();
             
             //any combo of Transient and Anti-Tasks
             if(!(newTask instanceof RecurringTask) && !(existingTask instanceof RecurringTask)){
+                System.out.println("Neither task is recurring");
                 //check overlap of dates first
-                
+                if (newTaskStartDate.equals(existingTaskStartDate)){
+                    //cases 1 and 3
+                    if((newTaskStartTime <= existingTaskStartTime) && (newTaskEndTime > existingTaskStartTime)){
+                        System.out.println("Case 1 or 3");
+                        overlapCounter++;
+                    } else if((newTaskStartTime >= existingTaskStartTime) && (newTaskStartTime < existingTaskEndTime)){
+                        System.out.println("Case 2 or 4");
+                        overlapCounter++;
+                    }
+                    
+                    //need to check Task types before returning true
+                    //cannot return false until all Tasks in listOfTask have been checked
+                    if(overlapCounter > 0){
+                        System.out.println("newTask is Trans?: "+ (newTask instanceof TransientTask));
+                        System.out.println("existingTask is Anti?: "+ (existingTask instanceof AntiTask));
+                        if(!((newTask instanceof TransientTask) && (existingTask instanceof AntiTask))){
+                            System.out.println("Not Trans & Anti combo");
+                            return true;
+                        }
+                    }
+                }else{
+                    System.out.println("The tasks are not on the same day.");
+                }
             }
         }
         

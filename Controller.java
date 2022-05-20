@@ -1,3 +1,7 @@
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.*;
 
 /**
  * Write a description of class Controller here.
@@ -5,10 +9,6 @@
  * @author (your name)
  * @version (a version number or a date)
  */
-
-import java.util.*;
-
-
 public class Controller
 {
     public Controller() {}
@@ -28,7 +28,7 @@ public class Controller
         System.out.print("\nEnter your choice: ");
     }
     
-    public void readInput() {
+    public void readInput() throws ParseException{
         Model model = new Model();
         Scanner scan = new Scanner(System.in);
         int input = Integer.parseInt(scan.nextLine());
