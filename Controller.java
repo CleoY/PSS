@@ -235,8 +235,8 @@ public class Controller
                 // Edit task
                 case 4:
                     //Input Task Name
-                    System.out.println("(Edit)Please enter the name of task: ");
-                    name = scan.nextLine();
+                    System.out.println("Please enter the name of task you wish to edit: ");
+                    name = scan.nextLine(); 
                     //Existed task name
                     pos = model.findTask(name);
                     if (pos != -1) {
@@ -249,6 +249,16 @@ public class Controller
 
                         if (myTask instanceof RecurringTask) {
                             RecurringTask rTask = (RecurringTask)myTask;
+
+                             //Save task info
+                             String tempName = myTask.getName();
+                             String tempType = rTask.getType();
+                             float tempStartTime = rTask.getStartTime();
+                             float tempDuration = rTask.getDuration();
+                             int tempStartDate = rTask.getStartDate();
+                             int tempEndDate = rTask.getEndDate();
+                             int tempFrequency = rTask.getFrequency();
+
                             System.out.println("Start Date: " + rTask.getStartDate());
                             System.out.println("End Date: " + rTask.getEndDate());
                             System.out.println("Frequency: " + rTask.getFrequency());
@@ -270,75 +280,308 @@ public class Controller
                             switch (typeChoice) {
                                 //Edit Name
                                 case 1:
-                                    System.out.println("What shall the task be renamed as: ");
-                                    String editName = scan.nextLine();
-                                    rTask.name = editName;
+                                System.out.println("What shall the task be renamed as: ");
+                                String editName = scan.nextLine(); 
+                                    rTask.setName(editName);
+                                    System.out.println("\n*** UPDATED TASK INFO ***");
+                                    System.out.println("Name: " + rTask.getName());
+                                    System.out.println("Type: " + rTask.getType());
+                                    System.out.println("Start time: " + rTask.getStartTime());
+                                    System.out.println("Duration: " + rTask.getDuration());
+                                    System.out.println("Start Date: " + rTask.getStartDate());
+                                    System.out.println("End Date: " + rTask.getEndDate());
+                                    System.out.println("Frequency: " + rTask.getFrequency());;
                                     break;
                                 //Edit Type
                                 case 2:
-                                    System.out.println("Please choose the new task type: ");
-                                    System.out.println("1 - Visit");
-                                    System.out.println("2 - Shopping");
-                                    System.out.println("3 - Appointment");
+                                System.out.println("Please choose a task type: ");
+                                System.out.println("1 - Class");
+                                System.out.println("2 - Study");
+                                System.out.println("3 - Sleep");
+                                System.out.println("4 - Exercise");
+                                System.out.println("5 - Work");
+                                System.out.println("6 - Meal");
 
-                                    int editType = Integer.parseInt(scan.nextLine());
-                                    while (editType < 1 || editType > 6) {
-                                        System.out.println("Invalid option. Please choose a valid option: ");
-                                        editType = Integer.parseInt(scan.nextLine());
-                                    }
-                                    switch (editType) {
-                                        case 1:
-                                            rTask.type = "Visit";
-                                            break;
-                                        case 2:
-                                            rTask.type = "Shopping";
-                                            break;
-                                        case 3:
-                                            rTask.type = "Appointment";
-                                            break;
-                                        default:
-                                            break;
-                                    }
+                                typeChoice = Integer.parseInt(scan.nextLine());
+                                while (typeChoice < 1 || typeChoice > 6) {
+                                    System.out.println("Invalid option. Please choose a valid option: ");
+                                    typeChoice = Integer.parseInt(scan.nextLine());
+                                }
+                                switch (typeChoice) {
+                                    case 1:
+                                        rTask.setType("Class");
+                                        System.out.println("\n*** UPDATED TASK INFO ***");
+                                        System.out.println("Name: " + rTask.getName());
+                                        System.out.println("Type: " + rTask.getType());
+                                        System.out.println("Start time: " + rTask.getStartTime());
+                                        System.out.println("Duration: " + rTask.getDuration());
+                                        System.out.println("Start Date: " + rTask.getStartDate());
+                                        System.out.println("End Date: " + rTask.getEndDate());
+                                        System.out.println("Frequency: " + rTask.getFrequency());;
+                                        break;
+                                    case 2:
+                                        rTask.setType("Study");
+                                        System.out.println("\n*** UPDATED TASK INFO ***");
+                                        System.out.println("Name: " + rTask.getName());
+                                        System.out.println("Type: " + rTask.getType());
+                                        System.out.println("Start time: " + rTask.getStartTime());
+                                        System.out.println("Duration: " + rTask.getDuration());
+                                        System.out.println("Start Date: " + rTask.getStartDate());
+                                        System.out.println("End Date: " + rTask.getEndDate());
+                                        System.out.println("Frequency: " + rTask.getFrequency());;
+                                        break;  
+                                    case 3: 
+                                        rTask.setType("Sleep");
+                                        System.out.println("\n*** UPDATED TASK INFO ***");
+                                        System.out.println("Name: " + rTask.getName());
+                                        System.out.println("Type: " + rTask.getType());
+                                        System.out.println("Start time: " + rTask.getStartTime());
+                                        System.out.println("Duration: " + rTask.getDuration());
+                                        System.out.println("Start Date: " + rTask.getStartDate());
+                                        System.out.println("End Date: " + rTask.getEndDate());
+                                        System.out.println("Frequency: " + rTask.getFrequency());;
+                                        break;
+                                    case 4:
+                                        rTask.setType("Exercise");
+                                        System.out.println("\n*** UPDATED TASK INFO ***");
+                                        System.out.println("Name: " + rTask.getName());
+                                        System.out.println("Type: " + rTask.getType());
+                                        System.out.println("Start time: " + rTask.getStartTime());
+                                        System.out.println("Duration: " + rTask.getDuration());
+                                        System.out.println("Start Date: " + rTask.getStartDate());
+                                        System.out.println("End Date: " + rTask.getEndDate());
+                                        System.out.println("Frequency: " + rTask.getFrequency());;
+                                        break;
+                                    case 5:
+                                        rTask.setType("Work");
+                                        System.out.println("\n*** UPDATED TASK INFO ***");
+                                        System.out.println("Name: " + rTask.getName());
+                                        System.out.println("Type: " + rTask.getType());
+                                        System.out.println("Start time: " + rTask.getStartTime());
+                                        System.out.println("Duration: " + rTask.getDuration());
+                                        System.out.println("Start Date: " + rTask.getStartDate());
+                                        System.out.println("End Date: " + rTask.getEndDate());
+                                        System.out.println("Frequency: " + rTask.getFrequency());;
+                                        break;      
+                                    case 6:
+                                        rTask.setType("Meal");
+                                        System.out.println("\n*** UPDATED TASK INFO ***");
+                                        System.out.println("Name: " + rTask.getName());
+                                        System.out.println("Type: " + rTask.getType());
+                                        System.out.println("Start time: " + rTask.getStartTime());
+                                        System.out.println("Duration: " + rTask.getDuration());
+                                        System.out.println("Start Date: " + rTask.getStartDate());
+                                        System.out.println("End Date: " + rTask.getEndDate());
+                                        System.out.println("Frequency: " + rTask.getFrequency());;
+                                        break;
+                                    default:
+                                        break;
+                                }
 
-                                    break;
-                                //Edit Start Time
-                                case 3:
-                                    rTask.startTime = getStartTime();
+                                break;
+
+                                //Edit Start Time  
+                                case 3: 
+
+                                //Delete old task
+                                model.getTaskList().remove(rTask);
+
+                                //Ask for new start time
+                                float newStartTime = getStartTime();
+
+                                //Make new task (with new start time)
+                                RecurringTask recTask1 = new RecurringTask(tempName, tempType, 
+                                newStartTime, tempDuration, tempStartDate, tempEndDate, tempFrequency);
+
+                                //No overlap
+                                if(!model.checkOverlap(recTask1)){
+                                    model.addTask(recTask1);
+                                    System.out.println("The start time has been changed successfully.");
+                                    System.out.println("\n*** UPDATED TASK INFO ***");
+                                    System.out.println("Name: " + recTask1.getName());
+                                    System.out.println("Type: " + recTask1.getType());
+                                    System.out.println("Start time: " + recTask1.getStartTime());
+                                    System.out.println("Duration: " + recTask1.getDuration());
+                                    System.out.println("Start Date: " + recTask1.getStartDate());
+                                    System.out.println("End Date: " + recTask1.getEndDate());
+                                    System.out.println("Frequency: " + recTask1.getFrequency());
+
+                                //Overlap
+                                } else {
+                                    //Delete new task
+                                    model.getTaskList().remove(recTask1);
+                                    //Remake old task
+                                    model.createRecurringTask(tempName, tempType, tempStartTime, tempDuration, tempStartDate, tempEndDate, tempFrequency);
+                                    System.out.println("This start time would overlap with other tasks.");
+
+                                }
                                     break;
                                 //Edit Duration
-                                case 4:
-                                    rTask.duration = getDuration();
+                                case 4: 
+                                    //Delete old task
+                                    model.getTaskList().remove(rTask);
+
+                                    //Ask for new duration
+                                    float newDuration = getDuration();
+
+                                    //Make new task (with new duration)
+                                    RecurringTask recTask2 = new RecurringTask(tempName, tempType, 
+                                    tempStartTime, newDuration, tempStartDate, tempEndDate, tempFrequency);
+
+                                    //No overlap
+                                    if(!model.checkOverlap(recTask2)){
+                                        model.addTask(recTask2);
+                                        System.out.println("The duration has been changed successfully.");
+                                        System.out.println("\n*** UPDATED TASK INFO ***");
+                                        System.out.println("Name: " + recTask2.getName());
+                                        System.out.println("Type: " + recTask2.getType());
+                                        System.out.println("Start time: " + recTask2.getStartTime());
+                                        System.out.println("Duration: " + recTask2.getDuration());
+                                        System.out.println("Start Date: " + recTask2.getStartDate());
+                                        System.out.println("End Date: " + recTask2.getEndDate());
+                                        System.out.println("Frequency: " + recTask2.getFrequency());
+
+                                    //Overlap
+                                    } else {
+                                        //Delete new task
+                                        model.getTaskList().remove(recTask2);
+                                        //Remake old task
+                                        model.createRecurringTask(tempName, tempType, 
+                                        tempStartTime, tempDuration, tempStartDate, tempEndDate, tempFrequency);
+                                        System.out.println("This duration would overlap with other tasks.");
+
+                                    }
                                     break;
+
                                 //Edit Start Date
-                                case 5:
-                                    rTask.setStartDate(getStartDate());
+                                case 5: 
+                                    //Delete old task
+                                    model.getTaskList().remove(rTask);
+
+                                    //Ask for new duration
+                                    int newStartDate = getStartDate();
+
+                                    //Make new task (with new start date)
+                                    RecurringTask recTask3 = new RecurringTask(tempName, tempType, 
+                                    tempStartTime, tempDuration, newStartDate, tempEndDate, tempFrequency);
+
+                                    //No overlap
+                                    if(!model.checkOverlap(recTask3)){
+                                        model.addTask(recTask3);
+                                        System.out.println("The start date has been changed successfully.");
+                                        System.out.println("\n*** UPDATED TASK INFO ***");
+                                        System.out.println("Name: " + recTask3.getName());
+                                        System.out.println("Type: " + recTask3.getType());
+                                        System.out.println("Start time: " + recTask3.getStartTime());
+                                        System.out.println("Duration: " + recTask3.getDuration());
+                                        System.out.println("Start Date: " + recTask3.getStartDate());
+                                        System.out.println("End Date: " + recTask3.getEndDate());
+                                        System.out.println("Frequency: " + recTask3.getFrequency());
+
+                                    //Overlap
+                                    } else {
+                                        //Delete new task
+                                        model.getTaskList().remove(recTask3);
+                                        //Remake old task
+                                        model.createRecurringTask(tempName, tempType, 
+                                        tempStartTime, tempDuration, tempStartDate, tempEndDate, tempFrequency);
+                                        System.out.println("This start date would overlap with other tasks.");
+
+                                    }
                                     break;
+
                                 //Edit End Date
                                 case 6:
-                                    rTask.setEndDate(getEndDate(rTask.getStartDate()));
+                                    //Delete old task
+                                    model.getTaskList().remove(rTask);
+
+                                    //Ask for new end date
+                                    int newEndDate = getEndDate(tempStartDate);
+
+                                    //Make new task (with new end date)
+                                    RecurringTask recTask4 = new RecurringTask(tempName, tempType, 
+                                    tempStartTime, tempDuration, tempStartDate, newEndDate, tempFrequency);
+
+                                    //No overlap
+                                    if(!model.checkOverlap(recTask4)){
+                                        model.addTask(recTask4);
+                                        System.out.println("The end date has been changed successfully.");
+                                        System.out.println("\n*** UPDATED TASK INFO ***");
+                                        System.out.println("Name: " + recTask4.getName());
+                                        System.out.println("Type: " + recTask4.getType());
+                                        System.out.println("Start time: " + recTask4.getStartTime());
+                                        System.out.println("Duration: " + recTask4.getDuration());
+                                        System.out.println("Start Date: " + recTask4.getStartDate());
+                                        System.out.println("End Date: " + recTask4.getEndDate());
+                                        System.out.println("Frequency: " + recTask4.getFrequency());
+
+                                    //Overlap
+                                    } else {
+                                        //Delete new task
+                                        model.getTaskList().remove(recTask4);
+                                        //Remake old task
+                                        model.createRecurringTask(tempName, tempType, 
+                                        tempStartTime, tempDuration, tempStartDate, tempEndDate, tempFrequency);
+                                        System.out.println("This end date would overlap with other tasks.");
+
+                                    }
                                     break;
+
                                 //Edit Frequency
-                                case 7:
-                                    rTask.setFrequency(getFrequency());
+                                case 7:    
+                                     //Delete old task
+                                     model.getTaskList().remove(rTask);
+
+                                     //Ask for new frequency
+                                     int newFrequency = getFrequency();
+
+                                     //Make new task (with new frequency)
+                                     RecurringTask recTask5 = new RecurringTask(tempName, tempType, 
+                                     tempStartTime, tempDuration, tempStartDate, tempEndDate, newFrequency);
+
+                                    //No overlap
+                                     if(!model.checkOverlap(recTask5)){
+                                         model.addTask(recTask5);
+                                         System.out.println("The frequency has been changed successfully.");
+                                         System.out.println("\n*** UPDATED TASK INFO ***");
+                                         System.out.println("Name: " + recTask5.getName());
+                                         System.out.println("Type: " + recTask5.getType());
+                                         System.out.println("Start time: " + recTask5.getStartTime());
+                                         System.out.println("Duration: " + recTask5.getDuration());
+                                         System.out.println("Start Date: " + recTask5.getStartDate());
+                                         System.out.println("End Date: " + recTask5.getEndDate());
+                                         System.out.println("Frequency: " + recTask5.getFrequency());;
+
+                                    //Overlap
+                                     } else {
+                                         //Delete new task
+                                         model.getTaskList().remove(recTask5);
+                                         //Remake old task
+                                         model.createRecurringTask(tempName, tempType, tempStartTime,
+                                          tempDuration, tempStartDate, tempEndDate, tempFrequency);
+                                         System.out.println("This frequency would overlap with other tasks.");
+
+                                     }
                                     break;
                                 default:
                                     taskType = "";
                                     break;
                             }
-                            System.out.println("\n*** UPDATED TASK INFO ***");
-                            System.out.println("Name: " + myTask.getName());
-                            System.out.println("Type: " + myTask.getType());
-                            System.out.println("Start time: " + myTask.getStartTime());
-                            System.out.println("Duration: " + myTask.getDuration());
-                            System.out.println("Start Date: " + rTask.getStartDate());
-                            System.out.println("End Date: " + rTask.getEndDate());
-                            System.out.println("Frequency: " + rTask.getFrequency());
+
                         }
                         //Edit Transient Task
                         else if (myTask instanceof TransientTask) {
                             TransientTask tTask = (TransientTask)myTask;
+
+                            //Save task info
+                            String tempName = myTask.getName();
+                            String tempType = tTask.getType();
+                            float tempStartTime = tTask.getStartTime();
+                            float tempDuration = tTask.getDuration();
+                            int tempStartDate = tTask.getDate();
+
                             System.out.println("Date: " + tTask.getDate());
-                            System.out.println("What would you like to edit? ");
+                            System.out.println("\nWhat would you like to edit? ");
                             System.out.println("1 - Name");
                             System.out.println("2 - Type");
                             System.out.println("3 - Start Time");
@@ -350,64 +593,179 @@ public class Controller
                                 typeChoice = Integer.parseInt(scan.nextLine());
                             }
                             switch (typeChoice) {
+
                                 //Edit Name
                                 case 1:
-                                    System.out.println("What shall the task be renamed as: ");
-                                    String editName = scan.nextLine();
-                                    tTask.name = editName;
+                                System.out.println("What shall the task be renamed as: ");
+                                String editName = scan.nextLine(); 
+                                    tTask.setName(editName);
+                                    System.out.println("\n*** UPDATED TASK INFO ***");
+                                    System.out.println("Name: " + tTask.getName());
+                                    System.out.println("Type: " + tTask.getType());
+                                    System.out.println("Start time: " + tTask.getStartTime());
+                                    System.out.println("Duration: " + tTask.getDuration());
+                                    System.out.println("Date: " + tTask.getDate());
                                     break;
+
                                 //Edit Type
                                 case 2:
-                                    System.out.println("Please choose the new task type: ");
-                                    System.out.println("1 - Visit");
-                                    System.out.println("2 - Shopping");
-                                    System.out.println("3 - Appointment");
+                                System.out.println("Please choose the new task type: ");
+                                System.out.println("1 - Visit");
+                                System.out.println("2 - Shopping");
+                                System.out.println("3 - Appointment");
 
-                                    int editType = Integer.parseInt(scan.nextLine());
-                                    while (editType < 1 || editType > 6) {
-                                        System.out.println("Invalid option. Please choose a valid option: ");
-                                        editType = Integer.parseInt(scan.nextLine());
+                                int editType = Integer.parseInt(scan.nextLine());
+                                while (editType < 1 || editType > 3) {
+                                    System.out.println("Invalid option. Please choose a valid option: ");
+                                    editType = Integer.parseInt(scan.nextLine());
                                     }
                                     switch (editType) {
                                         case 1:
-                                            tTask.type = "Visit";
+                                            tTask.setType("Visit");
+                                            System.out.println("\n*** UPDATED TASK INFO ***");
+                                            System.out.println("Name: " + tTask.getName());
+                                            System.out.println("Type: " + tTask.getType());
+                                            System.out.println("Start time: " + tTask.getStartTime());
+                                            System.out.println("Duration: " + tTask.getDuration());
+                                            System.out.println("Date: " + tTask.getDate());
                                             break;
                                         case 2:
-                                            tTask.type = "Shopping";
-                                            break;
-                                        case 3:
-                                            tTask.type = "Appointment";
+                                            tTask.setType("Shopping");
+                                            System.out.println("\n*** UPDATED TASK INFO ***");
+                                            System.out.println("Name: " + tTask.getName());
+                                            System.out.println("Type: " + tTask.getType());
+                                            System.out.println("Start time: " + tTask.getStartTime());
+                                            System.out.println("Duration: " + tTask.getDuration());
+                                            System.out.println("Date: " + tTask.getDate());
+                                            break;  
+                                        case 3: 
+                                            tTask.setType("Appointment");
+                                            System.out.println("\n*** UPDATED TASK INFO ***");
+                                            System.out.println("Name: " + tTask.getName());
+                                            System.out.println("Type: " + tTask.getType());
+                                            System.out.println("Start time: " + tTask.getStartTime());
+                                            System.out.println("Duration: " + tTask.getDuration());
+                                            System.out.println("Date: " + tTask.getDate());
                                             break;
                                         default:
                                             break;
-                                    }
+                                        }
 
-                                    break;
-                                //Edit Start Time
-                                case 3:
-                                    tTask.startTime = getStartTime();
-                                    break;
+                                break;
+
+                                //Edit Start Time  
+                                case 3: 
+                                     //Delete old task
+                                     model.getTaskList().remove(tTask);
+
+                                     //Ask for new start time
+                                     float newStartTime = getStartTime();
+
+                                     //Make new task (with new start time)
+                                     TransientTask traTask1 = new TransientTask(tempName, tempType, 
+                                     newStartTime, tempDuration, tempStartDate);
+
+                                     //No overlap
+                                     if(!model.checkOverlap(traTask1)){
+                                         model.addTask(traTask1);
+                                         System.out.println("The start time has been changed successfully.");
+                                         System.out.println("\n*** UPDATED TASK INFO ***");
+                                         System.out.println("Name: " + traTask1.getName());
+                                         System.out.println("Type: " + traTask1.getType());
+                                         System.out.println("Start time: " + traTask1.getStartTime());
+                                         System.out.println("Duration: " + traTask1.getDuration());
+                                         System.out.println("Date: " + traTask1.getDate());
+
+                                    //Overlap
+                                     } else {
+                                         //Delete new task
+                                         model.getTaskList().remove(traTask1);
+                                         //Remake old task
+                                         model.createTransientTask(tempName, tempType,
+                                          tempStartTime, tempDuration, tempStartDate);
+                                         System.out.println("This start time would overlap with other tasks.");
+                                     }
+                                break;
+
                                 //Edit Duration
-                                case 4:
-                                    tTask.duration = getDuration();
+                                case 4: 
+                                    //Delete old task
+                                    model.getTaskList().remove(tTask);
+
+                                    //Ask for new duration
+                                    float newDuration = getDuration();
+
+                                    //Make new task (with new duration)
+                                    TransientTask traTask2 = new TransientTask(tempName, tempType, 
+                                    tempStartTime, newDuration, tempStartDate);
+
+                                    //No overlap
+                                    if(!model.checkOverlap(traTask2)){
+                                        model.addTask(traTask2);
+                                        System.out.println("The duration has been changed successfully.");
+                                        System.out.println("\n*** UPDATED TASK INFO ***");
+                                        System.out.println("Name: " + traTask2.getName());
+                                        System.out.println("Type: " + traTask2.getType());
+                                        System.out.println("Start time: " + traTask2.getStartTime());
+                                        System.out.println("Duration: " + traTask2.getDuration());
+                                        System.out.println("Date: " + traTask2.getDate());
+
+                                    //Overlap
+                                    } else {
+                                        //Delete new task
+                                        model.getTaskList().remove(traTask2);
+                                        //Remake old task
+                                        model.createTransientTask(tempName, tempType, 
+                                        tempStartTime, tempDuration, tempStartDate);
+                                        System.out.println("This duration would overlap with other tasks.");
+                                    }
                                     break;
+
                                 //Edit Start Date
-                                case 5:
-                                    tTask.setDate(getDate());
+                                case 5: 
+                                    //Delete old task
+                                    model.getTaskList().remove(tTask);
+
+                                    //Ask for new start date
+                                    int newStartDate = getStartDate();
+
+                                    //Make new task (with new start date)
+                                    TransientTask traTask3 = new TransientTask(tempName, tempType,
+                                     tempStartTime, tempDuration, newStartDate);
+
+                                    //No overlap
+                                    if(!model.checkOverlap(traTask3)){
+                                        model.addTask(traTask3);
+                                        System.out.println("The start date has been changed successfully.");
+                                        System.out.println("\n*** UPDATED TASK INFO ***");
+                                        System.out.println("Name: " + traTask3.getName());
+                                        System.out.println("Type: " + traTask3.getType());
+                                        System.out.println("Start time: " + traTask3.getStartTime());
+                                        System.out.println("Duration: " + traTask3.getDuration());
+                                        System.out.println("Date: " + traTask3.getDate());
+
+                                    //Overlap
+                                    } else {
+                                        //Delete new task
+                                        model.getTaskList().remove(traTask3);
+                                        //Remake old task
+                                        model.createTransientTask(tempName, tempType, 
+                                        tempStartTime, tempDuration, tempStartDate);
+                                        System.out.println("This start date would overlap with other tasks.");
+                                    }
                                 default:
                                     taskType = "";
                                     break;
                             }
-                            System.out.println("\n*** UPDATED TASK INFO ***");
-                            System.out.println("Name: " + myTask.getName());
-                            System.out.println("Type: " + myTask.getType());
-                            System.out.println("Start time: " + myTask.getStartTime());
-                            System.out.println("Duration: " + myTask.getDuration());
-                            System.out.println("Date: " + tTask.getDate());
                         }
                         //Edit Anti-Task
                         else {
                             AntiTask aTask = (AntiTask)myTask;
+                            String tempName = myTask.getName();
+                            String tempType = aTask.getType();
+                            float tempStartTime = aTask.getStartTime();
+                            float tempDuration = aTask.getDuration();
+                            int tempStartDate = aTask.getDate();
                             System.out.println("Date: " + aTask.getDate());
                             System.out.println("What would you like to edit? ");
                             System.out.println("1 - Name");
@@ -423,32 +781,121 @@ public class Controller
                                 //Edit Name
                                 case 1:
                                     System.out.println("What shall the task be renamed as: ");
-                                    String editName = scan.nextLine();
-                                    aTask.name = editName;
+                                    String editName = scan.nextLine(); 
+                                    aTask.setName(editName);
+                                    System.out.println("\n*** UPDATED TASK INFO ***");
+                                    System.out.println("Name: " + aTask.getName());
+                                    System.out.println("Type: " + aTask.getType());
+                                    System.out.println("Start time: " + aTask.getStartTime());
+                                    System.out.println("Duration: " + aTask.getDuration());
+                                    System.out.println("Date: " + aTask.getDate());
                                     break;
+
                                 //Edit Start Time  (same check as delete) also need to check if new start time is valid
-                                case 2:
-                                    aTask.startTime = getStartTime();
+                                case 2: 
+                                    //Delete old task
+                                    model.getTaskList().remove(aTask);
+
+                                    //Ask for new start time
+                                    float newStartTime = getStartTime();
+
+                                    //Make new task (with new start time)
+                                    AntiTask antTask1 = new AntiTask(tempName, tempType,
+                                     newStartTime, tempDuration, tempStartDate);
+
+                                    //No overlap
+                                    if(!model.checkOverlap(antTask1)){
+                                        model.addTask(antTask1);
+                                        System.out.println("The start time has been changed successfully.");
+                                        System.out.println("\n*** UPDATED TASK INFO ***");
+                                        System.out.println("Name: " + antTask1.getName());
+                                        System.out.println("Type: " + antTask1.getType());
+                                        System.out.println("Start time: " + antTask1.getStartTime());
+                                        System.out.println("Duration: " + antTask1.getDuration());
+                                        System.out.println("Date: " + antTask1.getDate());
+
+                                    //Overlap
+                                    } else {
+                                        //Delete new task
+                                        model.getTaskList().remove(antTask1);
+                                        //Remake old task
+                                        model.createAntiTask(tempName, tempType,
+                                         tempStartTime, tempDuration, tempStartDate);
+                                        System.out.println("This start time would overlap with other tasks.");
+                                    }
                                     break;
+
                                 //Edit Duration
-                                case 3:
-                                    System.out.println("Please enter the duration: ");
-                                    aTask.duration = getDuration();
+                                case 3: 
+                                    //Delete old task
+                                    model.getTaskList().remove(aTask);
+
+                                    //Ask for new duration
+                                    float newDuration = getDuration();
+
+                                    //Make new task (with new duration)
+                                    AntiTask antTask2 = new AntiTask(tempName, tempType,
+                                     tempStartTime, newDuration, tempStartDate);
+
+                                    //No overlap
+                                    if(!model.checkOverlap(antTask2)){
+                                        model.addTask(antTask2);
+                                        System.out.println("The duration has been changed successfully.");
+                                        System.out.println("\n*** UPDATED TASK INFO ***");
+                                        System.out.println("Name: " + antTask2.getName());
+                                        System.out.println("Type: " + antTask2.getType());
+                                        System.out.println("Start time: " + antTask2.getStartTime());
+                                        System.out.println("Duration: " + antTask2.getDuration());
+                                        System.out.println("Date: " + antTask2.getDate());
+
+                                    //Overlap
+                                    } else {
+                                        //Delete new task
+                                        model.getTaskList().remove(antTask2);
+                                        //Remake old task
+                                        model.createAntiTask(tempName, tempType, 
+                                        tempStartTime, tempDuration, tempStartDate);
+                                        System.out.println("This duration would overlap with other tasks.");
+                                    }
                                     break;
+
                                 //Edit Start Date
-                                case 4:
-                                    aTask.setDate(getDate());
+                                case 4: 
+                                    //Delete old task
+                                    model.getTaskList().remove(aTask);
+
+                                    //Ask for new start date
+                                    int newDate = getStartDate();
+
+                                    //Make new task (with new start date)
+                                    AntiTask antTask3 = new AntiTask(tempName, tempType, 
+                                    tempStartTime, tempDuration, newDate);
+
+                                    //No overlap
+                                    if(!model.checkOverlap(antTask3)){
+                                        model.addTask(antTask3);
+                                        System.out.println("The date has been changed successfully.");
+                                        System.out.println("\n*** UPDATED TASK INFO ***");
+                                        System.out.println("Name: " + antTask3.getName());
+                                        System.out.println("Type: " + antTask3.getType());
+                                        System.out.println("Start time: " + antTask3.getStartTime());
+                                        System.out.println("Duration: " + antTask3.getDuration());
+                                        System.out.println("Date: " + antTask3.getDate());
+
+                                    //Overlap
+                                    } else {
+                                        //Delete new task
+                                        model.getTaskList().remove(antTask3);
+                                        //Remake old task
+                                        model.createAntiTask(tempName, tempType, 
+                                        tempStartTime, tempDuration, tempStartDate);
+                                        System.out.println("This date would overlap with other tasks.");
+                                    }
                                 default:
                                     taskType = "";
                                     break;
-                            }
-                            System.out.println("\n*** UPDATED TASK INFO ***");
-                            System.out.println("Name: " + myTask.getName());
-                            System.out.println("Type: " + myTask.getType());
-                            System.out.println("Start time: " + myTask.getStartTime());
-                            System.out.println("Duration: " + myTask.getDuration());
-                            System.out.println("Date: " + aTask.getDate());
-                        }
+                                }
+                        }   
                     }
                     //Non existed task name
                     else {
