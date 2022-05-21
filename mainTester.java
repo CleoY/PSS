@@ -2,6 +2,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class mainTester
 {
@@ -9,42 +10,69 @@ public class mainTester
     public static void main(String[] args) throws ParseException{
         
         
+        
         AntiTask aTask = new AntiTask("anti","antiType",4,4f,20220504); //existing task
         //AntiTask aTask2 = new AntiTask("anti2","antiType",5,3f,20220509);
         
         //TransientTask tTask2 = new TransientTask("trans2","transType",4,3f,20220509); //new task
-        TransientTask tTask = new TransientTask("trans","transType",7,3f,20220503); //existing task
+        RecurringTask rTask2 = new RecurringTask("rec2","RecType",3,3f,20220501, 20220530,1);
         
         
         
-        RecurringTask rTask2 = new RecurringTask("rec2","RecType",3,3,20220502, 20220506,1); //new task
-        RecurringTask rTask = new RecurringTask("rec1","RecType",4,3,20220501, 20220507,1); //existing task        
         
         
-        Date recStartDate2 = rTask2.getStartDateObject();
-        System.out.println("Rec start2: "+recStartDate2);
-        Date recEndDate2 = rTask2.getEndDateObject();
-        System.out.println("Rec end2: "+recEndDate2);
+        TransientTask tTask = new TransientTask("trans","transType",7,3f,20220503); //new task
+        RecurringTask rTask = new RecurringTask("rec1","RecType",6,3f,20220511, 20220630,7); //existing task
+        
+               
+        
+        System.out.println("\n");
+        
+        Date transDate = tTask.getStartDateObject();
+        System.out.println("Trans start: "+ transDate);
+        
+        float tStartTime = tTask.getStartTime();
+        System.out.println("Start time1: "+tStartTime);
+        float tEndTime = tTask.getEndTime();
+        System.out.println("End time1: "+tEndTime);   
+        
         
         Date recStartDate = rTask.getStartDateObject();
-        System.out.println("Rec start: "+recStartDate);
+        System.out.println("Weekly rec start2: "+recStartDate);
         Date recEndDate = rTask.getEndDateObject();
-        System.out.println("Rec end: "+recEndDate);
-        
-        float startTime2 = rTask2.getStartTime();
-        System.out.println("Start time1: "+startTime2);
-        float endTime2 = rTask2.getEndTime();
-        System.out.println("End time1: "+endTime2);
+        System.out.println("Weekly rec end2: "+recEndDate);
         
         float startTime = rTask.getStartTime();
-        System.out.println("Start time2: "+startTime);
+        System.out.println("Weekly start time2: "+startTime);
         float endTime = rTask.getEndTime();
-        System.out.println("End time2: "+endTime);
+        System.out.println("Weekly end time2: "+endTime);
         
         
         listOfTask.add(rTask); //existing task
-        boolean ovie = checkOverlap(rTask2); //new task
-        System.out.println("Check overlap: "+ovie);
+        boolean ovie = checkOverlap(tTask); //new task
+        System.out.println("Check overlap: "+ovie);    
+
+        
+        // Date recStartDate2 = rTask2.getStartDateObject();
+        // System.out.println("Weekly rec start1: "+recStartDate2);
+        // Date recEndDate2 = rTask2.getEndDateObject();
+        // System.out.println("Weekly rec end1: "+recEndDate2);
+        
+        // float startTime2 = rTask2.getStartTime();
+        // System.out.println("Weekly start time1: "+startTime2);
+        // float endTime2 = rTask2.getEndTime();
+        // System.out.println("Weekly end time1: "+endTime2);
+        
+        
+        // Date recStartDate2 = rTask2.getStartDateObject();
+        // System.out.println("Daily rec start: "+recStartDate2);
+        // Date recEndDate2 = rTask2.getEndDateObject();
+        // System.out.println("Daily rec end: "+recEndDate2);
+        
+        // float startTime2 = rTask2.getStartTime();
+        // System.out.println("Daily start time1: "+startTime2);
+        // float endTime2 = rTask2.getEndTime();
+        // System.out.println("Daily end time1: "+endTime2);
         
         
         // Date antiDate = aTask.getStartDateObject();
@@ -196,6 +224,12 @@ public class mainTester
         int newTaskFrequency=0; //only if newTask is recurring
         int existingTaskFrequency=0; //only if existingTask is recurring
         
+        //for WEEKLY RecurringTask checks
+        Calendar newCalendar = Calendar.getInstance(); 
+        Calendar exCalendar = Calendar.getInstance(); 
+        Date newTempDate;
+        Date exTempDate;
+        
         int timeOverlapCounter=0;
         int dateOverlapCounter=0;
         
@@ -220,6 +254,9 @@ public class mainTester
             existingTask = listOfTask.get(j);
             dateOverlapCounter = 0;
             timeOverlapCounter = 0;
+            
+            newTaskFrequency = 0;
+            existingTaskFrequency = 0;
             
             //get existing task's type, date(s), startTime, and duration
             existingTaskType = existingTask.getType();
@@ -267,8 +304,12 @@ public class mainTester
                     existingTaskFrequency = ((RecurringTask)existingTask).getFrequency();
                 }
                 
-                //one or both are DAILY recurring tasks
-                if(newTaskFrequency + existingTaskFrequency <= 2){
+                //one or both are DAILY recurring tasks; covers ALL combos with daily
+                //0+1, 1+0, or 1+1
+                //1+7 or 7+1 ONLY
+                if((newTaskFrequency + existingTaskFrequency <= 2) 
+                        || (newTaskFrequency + existingTaskFrequency == 8)){
+                    //8 = possibly 1 weekly
                     System.out.println("One or both are daily recurring");
                     //check dates
                     //checking dates for 4 standard cases accounts for 1 or 2 daily RecurringTasks
@@ -279,22 +320,51 @@ public class mainTester
                         dateOverlapCounter++;
                     }
                 } 
-                //ONE weekly + 1 daily/anti/trans
-                else if(newTaskFrequency + existingTaskFrequency <= 8){
-                    System.out.println("Just one weekly");
-                }
-                //2 weekly since sum > 8
+                //1-2 weekly + anti/trans; NO daily
+                //0+7, 7+0, OR 7+7
                 else{
-                    System.out.println("TWO weekly recurring tasks");
+                    System.out.println("1-2 weekly");
+                    
+                    //Initialize tempDate objects
+                    newCalendar.setTime(newTaskStartDate);
+                    newTempDate = newCalendar.getTime();
+                    exCalendar.setTime(existingTaskStartDate);
+                    exTempDate = exCalendar.getTime();
+                    
+                    //iterate through every instance of POSSIBLE NEW WEEKLY RecurringTask
+                    while (newTempDate.compareTo(newTaskEndDate)<=0){
+                        //iterate through every instace of POSSIBLE existing weekly RecurringTask
+                        while(exTempDate.compareTo(existingTaskEndDate)<=0){
+                            if(newTempDate.compareTo(exTempDate)==0){
+                                dateOverlapCounter++;
+                                break;
+                            }
+                            
+                            //increment existingTask tempDate by 1 week
+                            newCalendar.add(Calendar.DATE, 7);
+                            exTempDate = exCalendar.getTime();
+                        }
+                        
+                        if(dateOverlapCounter > 0){
+                            break;
+                        }
+                        
+                        //increment newTempDate by 1 week
+                        newCalendar.add(Calendar.DATE, 7);
+                        newTempDate = newCalendar.getTime();
+                        
+                        //reset exTempDate
+                        exCalendar.setTime(existingTaskStartDate);
+                        exTempDate = exCalendar.getTime();
+                    }
                 }
+                
                 //check times
                 if(dateOverlapCounter > 0){
                     System.out.println("The dates overlap");
                     if((newTaskStartTime <= existingTaskStartTime) && (newTaskEndTime > existingTaskStartTime)){
-                        System.out.println("Case 1 or 3");
                         timeOverlapCounter++;
                     } else if((newTaskStartTime >= existingTaskStartTime) && (newTaskStartTime < existingTaskEndTime)){
-                        System.out.println("Case 2 or 4");
                         timeOverlapCounter++;
                     }
                 }
@@ -307,10 +377,8 @@ public class mainTester
                         return true;
                     }
                 }
-                
             }
         }
-        
         return false;
     }
 }

@@ -1,6 +1,7 @@
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Calendar;
 import java.util.*;
 
 /**
@@ -134,7 +135,7 @@ public class Model
         return true;
     }
     
-    private boolean checkOverlap(Task newTask){
+    public boolean checkOverlap(Task newTask){
         //names
         String newName = newTask.getName();
         String existingName;
@@ -165,6 +166,12 @@ public class Model
         int newTaskFrequency=0; //only if newTask is recurring
         int existingTaskFrequency=0; //only if existingTask is recurring
         
+        //for WEEKLY RecurringTask checks
+        Calendar newCalendar = Calendar.getInstance(); 
+        Calendar exCalendar = Calendar.getInstance(); 
+        Date newTempDate;
+        Date exTempDate;
+        
         int timeOverlapCounter=0;
         int dateOverlapCounter=0;
         
@@ -189,6 +196,9 @@ public class Model
             existingTask = listOfTask.get(j);
             dateOverlapCounter = 0;
             timeOverlapCounter = 0;
+            
+            newTaskFrequency = 0;
+            existingTaskFrequency = 0;
             
             //get existing task's type, date(s), startTime, and duration
             existingTaskType = existingTask.getType();
@@ -236,8 +246,12 @@ public class Model
                     existingTaskFrequency = ((RecurringTask)existingTask).getFrequency();
                 }
                 
-                //one or both are DAILY recurring tasks
-                if(newTaskFrequency + existingTaskFrequency <= 2){
+                //one or both are DAILY recurring tasks; covers ALL combos with daily
+                //0+1, 1+0, or 1+1
+                //1+7 or 7+1 ONLY
+                if((newTaskFrequency + existingTaskFrequency <= 2) 
+                        || (newTaskFrequency + existingTaskFrequency == 8)){
+                    //8 = possibly 1 weekly
                     System.out.println("One or both are daily recurring");
                     //check dates
                     //checking dates for 4 standard cases accounts for 1 or 2 daily RecurringTasks
@@ -248,22 +262,51 @@ public class Model
                         dateOverlapCounter++;
                     }
                 } 
-                //ONE weekly + 1 daily/anti/trans
-                else if(newTaskFrequency + existingTaskFrequency <= 8){
-                    System.out.println("Just one weekly");
-                }
-                //2 weekly since sum > 8
+                //1-2 weekly + anti/trans; NO daily
+                //0+7, 7+0, OR 7+7
                 else{
-                    System.out.println("TWO weekly recurring tasks");
+                    System.out.println("1-2 weekly");
+                    
+                    //Initialize tempDate objects
+                    newCalendar.setTime(newTaskStartDate);
+                    newTempDate = newCalendar.getTime();
+                    exCalendar.setTime(existingTaskStartDate);
+                    exTempDate = exCalendar.getTime();
+                    
+                    //iterate through every instance of POSSIBLE NEW WEEKLY RecurringTask
+                    while (newTempDate.compareTo(newTaskEndDate)<=0){
+                        //iterate through every instace of POSSIBLE existing weekly RecurringTask
+                        while(exTempDate.compareTo(existingTaskEndDate)<=0){
+                            if(newTempDate.compareTo(exTempDate)==0){
+                                dateOverlapCounter++;
+                                break;
+                            }
+                            
+                            //increment existingTask tempDate by 1 week
+                            newCalendar.add(Calendar.DATE, 7);
+                            exTempDate = exCalendar.getTime();
+                        }
+                        
+                        if(dateOverlapCounter > 0){
+                            break;
+                        }
+                        
+                        //increment newTempDate by 1 week
+                        newCalendar.add(Calendar.DATE, 7);
+                        newTempDate = newCalendar.getTime();
+                        
+                        //reset exTempDate
+                        exCalendar.setTime(existingTaskStartDate);
+                        exTempDate = exCalendar.getTime();
+                    }
                 }
+                
                 //check times
                 if(dateOverlapCounter > 0){
                     System.out.println("The dates overlap");
                     if((newTaskStartTime <= existingTaskStartTime) && (newTaskEndTime > existingTaskStartTime)){
-                        System.out.println("Case 1 or 3");
                         timeOverlapCounter++;
                     } else if((newTaskStartTime >= existingTaskStartTime) && (newTaskStartTime < existingTaskEndTime)){
-                        System.out.println("Case 2 or 4");
                         timeOverlapCounter++;
                     }
                 }
@@ -276,13 +319,8 @@ public class Model
                         return true;
                     }
                 }
-                
             }
         }
-        
         return false;
-    }
-    private Task findTaskFromNameBinarySearch(String name){
-        return null;
     }
 }
