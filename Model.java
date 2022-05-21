@@ -150,8 +150,8 @@ public class Model
         Date newTaskStartDate;
         Date existingTaskStartDate;
         
-        //Date newTaskEndDate; //could be same day as startDate
-        //Date existingTaskEndDate;
+        Date newTaskEndDate; //could be same day as startDate
+        Date existingTaskEndDate;
         
         //times
         float newTaskStartTime;
@@ -165,7 +165,8 @@ public class Model
         int newTaskFrequency=0; //only if newTask is recurring
         int existingTaskFrequency=0; //only if existingTask is recurring
         
-        int overlapCounter=0;
+        int timeOverlapCounter=0;
+        int dateOverlapCounter=0;
         
         //check for name overlap
         for(int i=0; i<listOfTask.size(); i++){
@@ -179,18 +180,20 @@ public class Model
         // get type, startDate, endDate, startTime, endTime, and duration of newTask
         newTaskType = newTask.getType();
         newTaskStartDate = newTask.getStartDateObject();
-        //newTaskEndDate = newTask.getEndDateObject();
+        newTaskEndDate = newTask.getEndDateObject();
         newTaskStartTime = newTask.getStartTime();
         newTaskEndTime = newTask.getEndTime();
         newTaskDuration = newTask.getDuration();
         
         for(int j=0; j<listOfTask.size(); j++){
             existingTask = listOfTask.get(j);
-            overlapCounter = 0;
+            dateOverlapCounter = 0;
+            timeOverlapCounter = 0;
+            
             //get existing task's type, date(s), startTime, and duration
             existingTaskType = existingTask.getType();
             existingTaskStartDate = existingTask.getStartDateObject();
-            //existingTaskEndDate = existingTask.getEndDateObject();
+            existingTaskEndDate = existingTask.getEndDateObject();
             existingTaskStartTime = existingTask.getStartTime();
             existingTaskEndTime = existingTask.getEndTime();
             existingTaskDuration = existingTask.getDuration();
@@ -201,17 +204,19 @@ public class Model
                 //check overlap of dates first
                 if (newTaskStartDate.equals(existingTaskStartDate)){
                     //cases 1 and 3
-                    if((newTaskStartTime <= existingTaskStartTime) && (newTaskEndTime > existingTaskStartTime)){
+                    if((newTaskStartTime <= existingTaskStartTime) 
+                            && (newTaskEndTime > existingTaskStartTime)){
                         System.out.println("Case 1 or 3");
-                        overlapCounter++;
-                    } else if((newTaskStartTime >= existingTaskStartTime) && (newTaskStartTime < existingTaskEndTime)){
+                        timeOverlapCounter++;
+                    } else if((newTaskStartTime >= existingTaskStartTime) 
+                            && (newTaskStartTime < existingTaskEndTime)){
                         System.out.println("Case 2 or 4");
-                        overlapCounter++;
+                        timeOverlapCounter++;
                     }
                     
                     //need to check Task types before returning true
                     //cannot return false until all Tasks in listOfTask have been checked
-                    if(overlapCounter > 0){
+                    if(timeOverlapCounter > 0){
                         System.out.println("newTask is Trans?: "+ (newTask instanceof TransientTask));
                         System.out.println("existingTask is Anti?: "+ (existingTask instanceof AntiTask));
                         if(!((newTask instanceof TransientTask) && (existingTask instanceof AntiTask))){
@@ -233,23 +238,46 @@ public class Model
                 
                 //one or both are DAILY recurring tasks
                 if(newTaskFrequency + existingTaskFrequency <= 2){
-                    
+                    System.out.println("One or both are daily recurring");
+                    //check dates
+                    //checking dates for 4 standard cases accounts for 1 or 2 daily RecurringTasks
+                    //dateOverlapCounter avoids repeating the same code for checking time
+                    if((newTaskStartDate.compareTo(existingTaskStartDate)<=0) && (newTaskEndDate.compareTo(existingTaskStartDate) > 0)){
+                        dateOverlapCounter++;
+                    } else if((newTaskStartDate.compareTo(existingTaskStartDate)>=0) && (newTaskStartDate.compareTo(existingTaskEndDate) < 0)){
+                        dateOverlapCounter++;
+                    }
                 } 
                 //ONE weekly + 1 daily/anti/trans
                 else if(newTaskFrequency + existingTaskFrequency <= 8){
-                    
+                    System.out.println("Just one weekly");
                 }
                 //2 weekly since sum > 8
                 else{
-                    
+                    System.out.println("TWO weekly recurring tasks");
+                }
+                //check times
+                if(dateOverlapCounter > 0){
+                    System.out.println("The dates overlap");
+                    if((newTaskStartTime <= existingTaskStartTime) && (newTaskEndTime > existingTaskStartTime)){
+                        System.out.println("Case 1 or 3");
+                        timeOverlapCounter++;
+                    } else if((newTaskStartTime >= existingTaskStartTime) && (newTaskStartTime < existingTaskEndTime)){
+                        System.out.println("Case 2 or 4");
+                        timeOverlapCounter++;
+                    }
                 }
                 
+                //check types
+                if(timeOverlapCounter > 0){
+                    System.out.println("The times overlap; need to check types");
+                    if(!(newTask instanceof AntiTask) && !(existingTask instanceof AntiTask)){
+                        System.out.println("Neither is an AntiTask");
+                        return true;
+                    }
+                }
                 
             }
-            // if(newTask instanceof RecurringTask){
-                // get frequency
-            // }
-            // if freq = 1 and other task is NOT weekly
         }
         
         return false;
