@@ -1,0 +1,20 @@
+#BlueJ class context
+comment0.target=RecurringTask
+comment0.text=\n\ Write\ a\ description\ of\ class\ RecurringTask\ here.\n\n\ @author\ (your\ name)\n\ @version\ (a\ version\ number\ or\ a\ date)\n
+comment1.params=name
+comment1.target=RecurringTask(java.lang.String)
+comment2.params=name\ type\ startTime\ duration\ startDate\ endDate\ frequency
+comment2.target=RecurringTask(java.lang.String,\ java.lang.String,\ float,\ float,\ int,\ int,\ int)
+comment3.params=
+comment3.target=int\ getStartDate()
+comment4.params=
+comment4.target=int\ getEndDate()
+comment5.params=
+comment5.target=int\ getFrequency()
+comment6.params=startDate
+comment6.target=void\ setStartDate(int)
+comment7.params=endDate
+comment7.target=void\ setEndDate(int)
+comment8.params=frequency
+comment8.target=void\ setFrequency(int)
+numComments=9
