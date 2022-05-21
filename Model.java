@@ -331,7 +331,7 @@ public class Model
         }
         return false;
     }
-    
+   
 private boolean findAssociatedRecurringTask(AntiTask aTask) throws ParseException{
         boolean found = false;
         for (int i = 0; i < listOfTask.size(); ++i) {
