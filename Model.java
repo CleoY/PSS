@@ -143,10 +143,6 @@ public class Model
         //temp variable for existing Tasks in listOfTask
         Task existingTask;
         
-        //types
-        String newTaskType;
-        String existingTaskType;
-        
         //dates
         Date newTaskStartDate;
         Date existingTaskStartDate;
@@ -184,8 +180,7 @@ public class Model
             }
         }
         
-        // get type, startDate, endDate, startTime, endTime, and duration of newTask
-        newTaskType = newTask.getType();
+        // get startDate, endDate, startTime, endTime, and duration of newTask
         newTaskStartDate = newTask.getStartDateObject();
         newTaskEndDate = newTask.getEndDateObject();
         newTaskStartTime = newTask.getStartTime();
@@ -200,8 +195,7 @@ public class Model
             newTaskFrequency = 0;
             existingTaskFrequency = 0;
             
-            //get existing task's type, date(s), startTime, and duration
-            existingTaskType = existingTask.getType();
+            //get existing task's date(s), startTime, endTime, and duration
             existingTaskStartDate = existingTask.getStartDateObject();
             existingTaskEndDate = existingTask.getEndDateObject();
             existingTaskStartTime = existingTask.getStartTime();
@@ -210,35 +204,26 @@ public class Model
             
             //any combo of Transient and Anti-Tasks
             if(!(newTask instanceof RecurringTask) && !(existingTask instanceof RecurringTask)){
-                System.out.println("Neither task is recurring");
                 //check overlap of dates first
                 if (newTaskStartDate.equals(existingTaskStartDate)){
                     //cases 1 and 3
                     if((newTaskStartTime <= existingTaskStartTime) 
                             && (newTaskEndTime > existingTaskStartTime)){
-                        System.out.println("Case 1 or 3");
                         timeOverlapCounter++;
                     } else if((newTaskStartTime >= existingTaskStartTime) 
                             && (newTaskStartTime < existingTaskEndTime)){
-                        System.out.println("Case 2 or 4");
                         timeOverlapCounter++;
                     }
                     
                     //need to check Task types before returning true
                     //cannot return false until all Tasks in listOfTask have been checked
                     if(timeOverlapCounter > 0){
-                        System.out.println("newTask is Trans?: "+ (newTask instanceof TransientTask));
-                        System.out.println("existingTask is Anti?: "+ (existingTask instanceof AntiTask));
                         if(!((newTask instanceof TransientTask) && (existingTask instanceof AntiTask))){
-                            System.out.println("Not Trans & Anti combo");
                             return true;
                         }
                     }
-                }else{
-                    System.out.println("The tasks are not on the same day.");
                 }
             } else {
-                System.out.println("At least one task is recurring");
                 if(newTask instanceof RecurringTask){
                     newTaskFrequency = ((RecurringTask)newTask).getFrequency();
                 }
@@ -251,8 +236,6 @@ public class Model
                 //1+7 or 7+1 ONLY
                 if((newTaskFrequency + existingTaskFrequency <= 2) 
                         || (newTaskFrequency + existingTaskFrequency == 8)){
-                    //8 = possibly 1 weekly
-                    System.out.println("One or both are daily recurring");
                     //check dates
                     //checking dates for 4 standard cases accounts for 1 or 2 daily RecurringTasks
                     //dateOverlapCounter avoids repeating the same code for checking time
@@ -265,8 +248,6 @@ public class Model
                 //1-2 weekly + anti/trans; NO daily
                 //0+7, 7+0, OR 7+7
                 else{
-                    System.out.println("1-2 weekly");
-                    
                     //Initialize tempDate objects
                     newCalendar.setTime(newTaskStartDate);
                     newTempDate = newCalendar.getTime();
@@ -275,10 +256,8 @@ public class Model
                     
                     //iterate through every instance of POSSIBLE NEW WEEKLY RecurringTask
                     while (newTempDate.compareTo(newTaskEndDate)<=0){
-                        System.out.println("newTempDate: "+newTempDate);
                         //iterate through every instace of POSSIBLE existing weekly RecurringTask
                         while(exTempDate.compareTo(existingTaskEndDate)<=0){
-                            System.out.println("ExTempDate: "+exTempDate);
                             if(newTempDate.compareTo(exTempDate)==0){
                                 dateOverlapCounter++;
                                 break;
@@ -305,7 +284,6 @@ public class Model
                 
                 //check times
                 if(dateOverlapCounter > 0){
-                    System.out.println("The dates overlap");
                     if((newTaskStartTime <= existingTaskStartTime) && (newTaskEndTime > existingTaskStartTime)){
                         timeOverlapCounter++;
                     } else if((newTaskStartTime >= existingTaskStartTime) && (newTaskStartTime < existingTaskEndTime)){
@@ -315,9 +293,7 @@ public class Model
                 
                 //check types
                 if(timeOverlapCounter > 0){
-                    System.out.println("The times overlap; need to check types");
                     if(!(newTask instanceof AntiTask) && !(existingTask instanceof AntiTask)){
-                        System.out.println("Neither is an AntiTask");
                         return true;
                     }
                 }
