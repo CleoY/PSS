@@ -901,16 +901,16 @@ public class Controller
     {
         System.out.println("Please enter a name for the file you want to write the schedule to:");
         String inputFileName = scan.nextLine();  // take in user input for file name
-        Path path = Paths.get("C:\\Users\\BT\\Documents\\CS 3560\\PSS-bt\\outputFiles\\" + inputFileName + ".json");    // checks directory if a json file with that name exists there
+        Path path = Paths.get("../" + inputFileName + ".json");    // goes back 1 directory and checks if a json file with that name exists there
 
         while(Files.exists(path))   // reprompt user for a file name if file with given name already exists
         {
             System.out.println("There already exists a json file with the name " + inputFileName + ". Please enter another filename:");
             inputFileName = scan.nextLine();  // set variable to new user-inputted file name
-            path = Paths.get("C:\\Users\\BT\\Documents\\CS 3560\\PSS-bt\\outputFiles\\" + inputFileName + ".json"); // set path to new file name for next check
+            path = Paths.get("../" + inputFileName + ".json"); // set path to new file name for next check
         }
 
-        File file = new File("C:\\Users\\BT\\Documents\\CS 3560\\PSS-bt\\outputFiles\\" + inputFileName + ".json"); // initialize file object with given name
+        File file = new File("../" + inputFileName + ".json"); // initialize file object with given name
         PrintWriter output = new PrintWriter(new FileWriter(String.valueOf(path)));
 
         try
@@ -928,7 +928,6 @@ public class Controller
             JSONObject json = new JSONObject();
             try
             {
-                //if (task.getType().matches("Class|Study|Sleep|Exercise|Work|Meal")) // checks if task if recurring task
                 if (task instanceof RecurringTask)
                 {
                     RecurringTask rTask = (RecurringTask) task; // cast task to RecurringTask type
@@ -942,7 +941,6 @@ public class Controller
                 }
                 else
                 {
-                    //if (task.getType().equals("Cancellation"))  // if task is an anti-task
                     if (task instanceof AntiTask)
                     {
                         AntiTask aTask = (AntiTask) task; // cast task to AntiTask type
