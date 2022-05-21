@@ -2,6 +2,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.*;
+import java.io.*;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 /**
  * Write a description of class Controller here.
@@ -9,6 +13,7 @@ import java.util.*;
  * @author (your name)
  * @version (a version number or a date)
  */
+
 public class Controller
 {
     public Controller() {}
@@ -32,7 +37,7 @@ public class Controller
         Model model = new Model();
         Scanner scan = new Scanner(System.in);
         int input = Integer.parseInt(scan.nextLine());
-        
+
         while (input != 0 ) {
             switch (input) {
             // Create task
@@ -126,51 +131,20 @@ public class Controller
                 }
                 
                 // Get start time
-                System.out.println("Please enter the start time: ");
-                float startTime = Float.parseFloat(scan.nextLine());
-                while (startTime < 0 || startTime > 23.75) {
-                    System.out.println("Invalid input. Please input a start time between 0 and 23.75: ");
-                    startTime = Float.parseFloat(scan.nextLine());
-                }
-                // Round to nearest .25
-                startTime = (float) Math.ceil(startTime * 4)/4f;
+                float startTime = getStartTime();
                 
                 // Get duration
-                System.out.println("Please enter the duration: ");
-                float duration = Float.parseFloat(scan.nextLine());
-                while (duration < 0.25 || duration > 23.75) {
-                    System.out.println("Invalid input. Please input a start time between 0.25 and 23.75: ");
-                    duration = Float.parseFloat(scan.nextLine());
-                } 
-                // Round to nearest .25
-                duration = (float) Math.ceil(duration * 4)/4f;
+                float duration = getDuration();
                 
                 if (choice == 1) {
                     // Get start date
-                    System.out.println("Please enter a start date in the format MMDDYYYY: ");
-                    int startDate = Integer.parseInt(scan.nextLine());
-                    // Need more check
-                    while (startDate < 0) {
-                        System.out.println("Invalid input. Please try again: ");
-                        startDate = Integer.parseInt(scan.nextLine());
-                    }
-                    
+                    int startDate = getStartDate();    
                     
                     // Get end date
-                    System.out.println("Please enter a start date in the format MMDDYYYY: ");
-                    int endDate = Integer.parseInt(scan.nextLine());
-                    while (endDate < startDate) {
-                        System.out.println("Invalid input: End date must be after start date. Please try again: ");
-                        endDate = Integer.parseInt(scan.nextLine());
-                    }
+                    int endDate = getEndDate(startDate);
                     
                     // Get frequency
-                    System.out.println("Please enter a frequency (1-7): ");
-                    int frequency = Integer.parseInt(scan.nextLine());
-                    while (frequency < 1 || frequency > 7) {
-                        System.out.println("Invalid input: Frequency must be an integer between 1 and 7. Please try again: ");
-                        frequency = Integer.parseInt(scan.nextLine());
-                    }
+                    int frequency = getFrequency();
                     
                     if (model.createRecurringTask(name, taskType, startTime, duration, startDate, endDate, frequency)) {
                         System.out.println("Sucessfully created recurring task.");
@@ -181,12 +155,7 @@ public class Controller
                 }
                 else if (choice == 2) {
                     // Get date
-                    System.out.println("Please enter a date in the format MMDDYYYY: ");
-                    int date = Integer.parseInt(scan.nextLine());
-                    while (date < 0) {
-                        System.out.println("Invalid input. Please try again: ");
-                        date = Integer.parseInt(scan.nextLine());
-                    }
+                    int date = getDate();
                     
                     if (model.createTransientTask(name, taskType, startTime, duration, date)) {
                         System.out.println("Sucessfully created transient task.");
@@ -197,12 +166,7 @@ public class Controller
                 }
                 else {
                     // Get date
-                    System.out.println("Please enter a date in the format MMDDYYYY: ");
-                    int date = Integer.parseInt(scan.nextLine());
-                    while (date < 0) {
-                        System.out.println("Invalid input. Please try again: ");
-                        date = Integer.parseInt(scan.nextLine());
-                    }
+                    int date = getDate();
                     
                     if (model.createAntiTask(name, taskType, startTime, duration, date)) {
                         System.out.println("Sucessfully created anti-task.");
@@ -336,57 +300,23 @@ public class Controller
                             break;
                             //Edit Start Time  
                             case 3: 
-                                System.out.println("Please enter the start time: ");
-                                float editStartTime = Float.parseFloat(scan.nextLine());
-                                while (editStartTime < 0 || editStartTime > 23.75) {
-                                    System.out.println("Invalid input. Please input a start time between 0 and 23.75: ");
-                                    editStartTime = Float.parseFloat(scan.nextLine());
-                                }
-                                // Round to nearest .25
-                                editStartTime = (float) Math.ceil(editStartTime * 4)/4f;
-                                rTask.startTime = editStartTime;
+                                rTask.startTime = getStartTime();
                                 break;
                             //Edit Duration
                             case 4: 
-                                System.out.println("Please enter the duration: ");
-                                float editDuration = Float.parseFloat(scan.nextLine());
-                                while (editDuration < 0.25 || editDuration > 23.75) {
-                                    System.out.println("Invalid input. Please input a start time between 0.25 and 23.75: ");
-                                    duration = Float.parseFloat(scan.nextLine());
-                                } 
-                                // Round to nearest .25
-                                editDuration = (float) Math.ceil(editDuration * 4)/4f;
-                                rTask.duration = editDuration;
+                                rTask.duration = getDuration();
                                 break;
                             //Edit Start Date
                             case 5: 
-                                System.out.println("Please enter a start date in the format MMDDYYYY: ");
-                                int editStartDate = Integer.parseInt(scan.nextLine());
-                                while (editStartDate < 0) {
-                                    System.out.println("Invalid input. Please try again: ");
-                                    editStartDate = Integer.parseInt(scan.nextLine());
-                                }
-                                rTask.setStartDate(editStartDate);
+                                rTask.setStartDate(getStartDate());
                                 break;
                             //Edit End Date
-                            case 6: 
-                                System.out.println("Please enter a end date in the format MMDDYYYY: ");
-                                int endDate = Integer.parseInt(scan.nextLine());
-                                while (endDate < rTask.getStartDate()) {
-                                    System.out.println("Invalid input: End date must be after start date. Please try again: ");
-                                    endDate = Integer.parseInt(scan.nextLine());
-                                }
-                                rTask.setEndDate(endDate);
+                            case 6:
+                                rTask.setEndDate(getEndDate(rTask.getStartDate()));
                                 break;
                             //Edit Frequency
-                            case 7: 
-                                System.out.println("Please enter a frequency (1-7): ");
-                                int newFrequency = Integer.parseInt(scan.nextLine());
-                                while (newFrequency < 1 || newFrequency > 7) {
-                                    System.out.println("Invalid input: Frequency must be an integer between 1 and 7. Please try again: ");
-                                    newFrequency = Integer.parseInt(scan.nextLine());
-                                }
-                                rTask.setFrequency(newFrequency);
+                            case 7:    
+                                rTask.setFrequency(getFrequency());
                                 break;
                             default:
                                 taskType = "";
@@ -452,38 +382,15 @@ public class Controller
                             break;
                             //Edit Start Time  
                             case 3: 
-                                System.out.println("Please enter the start time: ");
-                                float editStartTime = Float.parseFloat(scan.nextLine());
-                                while (editStartTime < 0 || editStartTime > 23.75) {
-                                    System.out.println("Invalid input. Please input a start time between 0 and 23.75: ");
-                                    editStartTime = Float.parseFloat(scan.nextLine());
-                                }
-                                // Round to nearest .25
-                                editStartTime = (float) Math.ceil(editStartTime * 4)/4f;
-                                tTask.startTime = editStartTime;
+                                tTask.startTime = getStartTime();
                             break;
                             //Edit Duration
                             case 4: 
-                                System.out.println("Please enter the duration: ");
-                                float editDuration = Float.parseFloat(scan.nextLine());
-                                while (editDuration < 0.25 || editDuration > 23.75) {
-                                    System.out.println("Invalid input. Please input a start time between 0.25 and 23.75: ");
-                                    duration = Float.parseFloat(scan.nextLine());
-                                } 
-                                // Round to nearest .25
-                                editDuration = (float) Math.ceil(editDuration * 4)/4f;
-                                tTask.duration = editDuration;
+                                tTask.duration = getDuration();
                                 break;
                             //Edit Start Date
                             case 5: 
-                                System.out.println("Please enter a start date in the format MMDDYYYY: ");
-                                int editStartDate = Integer.parseInt(scan.nextLine());
-                                // Need more check
-                                while (editStartDate < 0) {
-                                    System.out.println("Invalid input. Please try again: ");
-                                    editStartDate = Integer.parseInt(scan.nextLine());
-                                }
-                                tTask.setDate(editStartDate);
+                                tTask.setDate(getDate());
                             default:
                                 taskType = "";
                                 break;
@@ -512,45 +419,22 @@ public class Controller
                         switch (typeChoice) {
                             //Edit Name
                             case 1:
-                            System.out.println("What shall the task be renamed as: ");
-                            String editName = scan.nextLine(); 
+                                System.out.println("What shall the task be renamed as: ");
+                                String editName = scan.nextLine(); 
                                 aTask.name = editName;
                                 break;
                             //Edit Start Time  (same check as delete) also need to check if new start time is valid
                             case 2: 
-                                System.out.println("Please enter the start time: ");
-                                float editStartTime = Float.parseFloat(scan.nextLine());
-                                while (editStartTime < 0 || editStartTime > 23.75) {
-                                    System.out.println("Invalid input. Please input a start time between 0 and 23.75: ");
-                                    editStartTime = Float.parseFloat(scan.nextLine());
-                                }
-                                // Round to nearest .25
-                                editStartTime = (float) Math.ceil(editStartTime * 4)/4f;
-                                aTask.startTime = editStartTime;
+                                aTask.startTime = getStartTime();
                                 break;
                             //Edit Duration
                             case 3: 
                                 System.out.println("Please enter the duration: ");
-                                float editDuration = Float.parseFloat(scan.nextLine());
-                                while (editDuration < 0.25 || editDuration > 23.75) {
-                                    System.out.println("Invalid input. Please input a start time between 0.25 and 23.75: ");
-                                    duration = Float.parseFloat(scan.nextLine());
-                                } 
-                                // Round to nearest .25
-                                editDuration = (float) Math.ceil(editDuration * 4)/4f;
-                                aTask.duration = editDuration;
+                                aTask.duration = getDuration();
                                 break;
                             //Edit Start Date
                             case 4: 
-                                System.out.println("Please enter a start date in the format MMDDYYYY: ");
-                                int editStartDate = Integer.parseInt(scan.nextLine());
-                                // Need more check
-                                while (editStartDate < 0) {
-                                    System.out.println("Invalid input. Please try again: ");
-                                    editStartDate = Integer.parseInt(scan.nextLine());
-                                }
-                                //Checking for overlap
-                                aTask.setDate(editStartDate);
+                                aTask.setDate(getDate());
                             default:
                                 taskType = "";
                                 break;
@@ -574,7 +458,57 @@ public class Controller
                 break;
             // Read schedule
             case 6:
-                
+                System.out.println("Please enter the name of the JSON file (including .json): ");
+                String fileName = scan.nextLine();
+                JSONParser jsonParser = new JSONParser();
+                try (FileReader reader = new FileReader(fileName)) {
+                    Object obj = jsonParser.parse(reader);
+
+                    JSONArray taskList = (JSONArray) obj;
+
+                    System.out.println("Tasks read in from file...");
+                    Model tempModel = new Model();
+                    boolean readOkay = true;
+                    boolean finalCheck = true;
+                    //taskList.forEach(tsk -> parseTaskObject( (JSONObject) tsk, tempModel));
+                    for (Object tsk : taskList) {
+                        if (!parseTaskObject((JSONObject) tsk, tempModel)) {
+                            readOkay = false;
+                        }
+                    }
+                    Model copyModel = model;
+                    if (!readOkay) {
+                        System.out.println("The json file had an error! Please recheck your file input. Rejecting all changes.");
+                    } else {
+                        for (Task task: tempModel.getTaskList()){
+                            try {
+                                if (task instanceof RecurringTask) {
+                                    RecurringTask rTask = (RecurringTask) task;
+                                    copyModel.createRecurringTask(task.getName(), task.getType(), task.getStartTime(), task.getDuration(), rTask.getStartDate(), rTask.getEndDate(), rTask.getFrequency());
+                                } else if (task instanceof TransientTask) {
+                                    TransientTask tTask = (TransientTask) task;
+                                    copyModel.createTransientTask(task.getName(), task.getType(), task.getStartTime(), task.getDuration(), tTask.getDate());
+                                } else {
+                                    AntiTask aTask = (AntiTask) task;
+                                    copyModel.createAntiTask(task.getName(), task.getType(), task.getStartTime(), task.getDuration(), aTask.getDate());
+                                }
+                            } catch (Exception e) {
+                                System.out.println("The json file had an error! Please recheck your file input. Rejecting all changes.");
+                                finalCheck = false;
+                            }
+                        }
+                        if (finalCheck) {
+                            model = copyModel;
+                        }
+                    }
+                } catch (FileNotFoundException e) {
+                    System.out.println("File name does not exists. Please try again.");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (org.json.simple.parser.ParseException e) {
+                    throw new RuntimeException(e);
+                }
+
                 break;
             // View schedule
             case 7:
@@ -599,5 +533,104 @@ public class Controller
         if (input == 0) {
             System.out.println("*** Thank you and have a great day! ***");
         }
+    }
+
+    private static boolean parseTaskObject(JSONObject task, Model tempModel) {
+        try {
+            String taskName = (String) task.get("Name");
+            String taskType = (String) task.get("Type");
+            if (taskType.matches("Class|Study|Sleep|Exercise|Work|Meal")) {
+                int taskSD = (int) (long) task.get("StartDate");
+                float taskST = (float) (double) task.get("StartTime");
+                float taskD = (float) (double) task.get("Duration");
+                int taskED = (int) (long) task.get("EndDate");
+                int taskF = (int) (long) task.get("Frequency");
+                tempModel.createRecurringTask(taskName, taskType, taskST, taskD, taskSD, taskED, taskF);
+                // throw exception if overlap detected within these tasks itself, reject read
+            } else {
+                int taskDate = (int) (long) task.get("Date");
+                float taskST = (float) (double) task.get("StartTime");
+                float taskD = (float) (double) task.get("Duration");
+                if (taskType.equals("Cancellation")) {
+                    tempModel.createAntiTask(taskName, taskType, taskST, taskD, taskDate);
+                } else {
+                    tempModel.createTransientTask(taskName, taskType, taskST, taskD, taskDate);
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+
+    }
+            
+    private float getStartTime() {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Please enter the start time: ");
+        float startTime = Float.parseFloat(scan.nextLine());
+        while (startTime < 0 || startTime > 23.75) {
+            System.out.println("Invalid input. Please input a start time between 0 and 23.75: ");
+            startTime = Float.parseFloat(scan.nextLine());
+        }
+        // Round to nearest .25
+        startTime = (float) Math.ceil(startTime * 4)/4f;
+        return startTime;
+    }
+    
+    private float getDuration() {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Please enter the duration: ");
+        float duration = Float.parseFloat(scan.nextLine());
+        while (duration < 0.25 || duration > 23.75) {
+            System.out.println("Invalid input. Please input a start time between 0.25 and 23.75: ");
+            duration = Float.parseFloat(scan.nextLine());
+        } 
+        // Round to nearest .25
+        duration = (float) Math.ceil(duration * 4)/4f;
+        return duration;
+    }
+    
+    private int getStartDate() {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Please enter a start date in the format YYYYMMDD: ");
+        int startDate = Integer.parseInt(scan.nextLine());
+        while (startDate < 0) {
+            System.out.println("Invalid input. Please try again: ");
+            startDate = Integer.parseInt(scan.nextLine());
+        }
+        return startDate;
+    }
+    
+    private int getEndDate(float startDate) {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Please enter an end date in the format YYYYMMDD: ");
+        int endDate = Integer.parseInt(scan.nextLine());
+        while (endDate < startDate) {
+            System.out.println("Invalid input: End date must be after start date. Please try again: ");
+            endDate = Integer.parseInt(scan.nextLine());
+        }
+        return endDate;
+    }
+    
+    private int getFrequency() {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Please enter a frequency (1-7): ");
+        int frequency = Integer.parseInt(scan.nextLine());
+        while (frequency < 1 || frequency > 7) {
+                System.out.println("Invalid input: Frequency must be an integer between 1 and 7. Please try again: ");
+                frequency = Integer.parseInt(scan.nextLine());
+        }
+        return frequency;
+    }
+    
+    private int getDate() {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Please enter a date in the format YYYYMMDD: ");
+        int date = Integer.parseInt(scan.nextLine());
+        while (date < 0) {
+            System.out.println("Invalid input. Please try again: ");
+            date = Integer.parseInt(scan.nextLine());
+        }
+        return date;
     }
 }

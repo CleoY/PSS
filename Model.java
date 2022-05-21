@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,25 +22,32 @@ public class Model
     public boolean createRecurringTask(String name, String type, float startTime, float duration, int startDate, int endDate, int frequency) throws ParseException{ 
         RecurringTask myTask = new RecurringTask(name, type, startTime, duration, startDate, endDate, frequency);
         // check overlap
-        // if not overlap, create task, add to list, return true
-        addTask(myTask);
-        return true;
+        // if not overlap, add to list, return true
+        if (!checkOverlap(myTask)) {
+            addTask(myTask);
+            return true;
+        }
+        return false;
     }
     
     public boolean createTransientTask(String name, String type, float startTime, float duration, int date) throws ParseException{
         TransientTask myTask = new TransientTask(name, type, startTime, duration, date);
         // check overlap
-        // if not overlap, create task, add to list, return true
-        addTask(myTask);
-        return true;
+        // if not overlap, add to list, return true
+        if (!checkOverlap(myTask)) {
+            addTask(myTask);
+            return true;
+        }
+        return false;
     }
     
     public boolean createAntiTask(String name, String type, float startTime, float duration, int date) throws ParseException{
         AntiTask myTask = new AntiTask(name, type, startTime, duration, date);
-        // check overlap
-        // if not overlap, create task, add to list, return true
-        addTask(myTask);
-        return true;
+        if (findAssociatedRecurringTask(myTask)) {
+            addTask(myTask);
+            return true;
+        }
+        return false;
     }
     
     public ArrayList<Task> getTaskList() {
@@ -133,6 +141,28 @@ public class Model
             }
         }
         return true;
+    }
+
+    public ArrayList<Task> getTasksInRange(int startDate, int endDate) throws ParseException {
+        SimpleDateFormat dateParser = new SimpleDateFormat("yyyyMMdd");
+        Date start = dateParser.parse(""+startDate);
+        Date end = dateParser.parse(""+endDate);
+        ArrayList<Task> tasks = new ArrayList<Task>();
+
+        for (int i = 0; i < listOfTask.size(); i++){
+            if (listOfTask.get(i).startDateObject.equals(start) || listOfTask.get(i).startDateObject.after(start)) {
+                if (listOfTask.get(i) instanceof RecurringTask) {
+                    if (listOfTask.get(i).startDateObject.equals(end) || listOfTask.get(i).startDateObject.before(end)){
+                        tasks.add(listOfTask.get(i));
+                    }
+                } else {
+                    if (listOfTask.get(i).endDateObject.equals(end) || listOfTask.get(i).endDateObject.before(end)) {
+                        tasks.add(listOfTask.get(i));
+                    }
+                }
+            }
+        }
+        return tasks;
     }
     
     public boolean checkOverlap(Task newTask){
@@ -300,5 +330,61 @@ public class Model
             }
         }
         return false;
+    }
+   
+private boolean findAssociatedRecurringTask(AntiTask aTask) throws ParseException{
+        boolean found = false;
+        for (int i = 0; i < listOfTask.size(); ++i) {
+            // Find a task with same start time
+            if (listOfTask.get(i).getStartTime() == aTask.getStartTime()) {
+                // Recurring Task case
+                if (listOfTask.get(i) instanceof RecurringTask) {
+                    RecurringTask rTask = (RecurringTask)listOfTask.get(i);
+                    int startDate = rTask.getStartDate();
+                    int endDate = rTask.getEndDate();
+                    int date = aTask.getDate();
+                
+                    if (date == startDate || date == endDate) {
+                        found = true;
+                    }
+                    else if (date < startDate || date > endDate) {
+                        return false;
+                    }
+                    else {
+                        // If anti-task is in the range of recurring task
+                        int frequency = rTask.getFrequency();
+                        String startDateStr = Integer.toString(startDate);
+                        String endDateStr = Integer.toString(endDate);
+                        String dateStr = Integer.toString(date);
+                        String instanceDate = "";
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+                        Calendar calendarDate = new GregorianCalendar();
+                        calendarDate.setTime(dateFormat.parse(startDateStr));
+                        while (!instanceDate.equals(endDateStr) && !instanceDate.equals(dateStr)) {
+                            calendarDate.add(Calendar.DATE, frequency);
+                            // Convert to String
+                            instanceDate = dateFormat.format(calendarDate.getTime());
+                        }
+                    
+                        if (instanceDate.equals(dateStr)) {
+                            found = true;
+                        }
+                    }
+                }
+                
+                // Overlap with another anti-task
+                if (listOfTask.get(i) instanceof AntiTask) {
+                    AntiTask atTask = (AntiTask)listOfTask.get(i);
+                    if (atTask.getDate() == aTask.getDate()) {
+                        return false;
+                    }
+                }
+                
+                // Does not check for overlapped transient
+                // because there should not be a transient task
+                // in recurring task range
+            }
+        }
+        return found;
     }
 }
