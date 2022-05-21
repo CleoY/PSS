@@ -9,32 +9,29 @@ public class mainTester
     private static ArrayList<Task> listOfTask = new ArrayList<Task>();
     public static void main(String[] args) throws ParseException{
         
-        
-        
-        AntiTask aTask = new AntiTask("anti","antiType",4,4f,20220504); //existing task
+        AntiTask aTask = new AntiTask("anti","antiType",3,2f,20220603); //existing task
         //AntiTask aTask2 = new AntiTask("anti2","antiType",5,3f,20220509);
         
+        TransientTask tTask = new TransientTask("trans","transType",3,3f,20220603); //new task
         //TransientTask tTask2 = new TransientTask("trans2","transType",4,3f,20220509); //new task
-        RecurringTask rTask2 = new RecurringTask("rec2","RecType",3,3f,20220501, 20220530,1);
         
         
-        
-        
-        
-        TransientTask tTask = new TransientTask("trans","transType",7,3f,20220503); //new task
-        RecurringTask rTask = new RecurringTask("rec1","RecType",6,3f,20220511, 20220630,7); //existing task
+        RecurringTask rTask2 = new RecurringTask("rec2","RecType",6,2f,20220515, 20220605,7);
+        RecurringTask rTask = new RecurringTask("rec1","RecType",3,3f,20220501, 20220603,7); //new task
         
                
         
         System.out.println("\n");
         
-        Date transDate = tTask.getStartDateObject();
-        System.out.println("Trans start: "+ transDate);
+        Date recStartDate2 = rTask2.getStartDateObject();
+        System.out.println("Weekly rec start1: "+recStartDate2);
+        Date recEndDate2 = rTask2.getEndDateObject();
+        System.out.println("Weekly rec end1: "+recEndDate2);
         
-        float tStartTime = tTask.getStartTime();
-        System.out.println("Start time1: "+tStartTime);
-        float tEndTime = tTask.getEndTime();
-        System.out.println("End time1: "+tEndTime);   
+        float startTime2 = rTask2.getStartTime();
+        System.out.println("Weekly start time1: "+startTime2);
+        float endTime2 = rTask2.getEndTime();
+        System.out.println("Weekly end time1: "+endTime2);
         
         
         Date recStartDate = rTask.getStartDateObject();
@@ -48,8 +45,8 @@ public class mainTester
         System.out.println("Weekly end time2: "+endTime);
         
         
-        listOfTask.add(rTask); //existing task
-        boolean ovie = checkOverlap(tTask); //new task
+        listOfTask.add(rTask2); //existing task
+        boolean ovie = checkOverlap(rTask); //new task
         System.out.println("Check overlap: "+ovie);    
 
         
@@ -193,7 +190,7 @@ public class mainTester
         
         
     }
-    private static boolean checkOverlap(Task newTask){
+    public static boolean checkOverlap(Task newTask){
         //names
         String newName = newTask.getName();
         String existingName;
@@ -333,15 +330,17 @@ public class mainTester
                     
                     //iterate through every instance of POSSIBLE NEW WEEKLY RecurringTask
                     while (newTempDate.compareTo(newTaskEndDate)<=0){
+                        System.out.println("newTempDate: "+newTempDate);
                         //iterate through every instace of POSSIBLE existing weekly RecurringTask
                         while(exTempDate.compareTo(existingTaskEndDate)<=0){
+                            System.out.println("ExTempDate: "+exTempDate);
                             if(newTempDate.compareTo(exTempDate)==0){
                                 dateOverlapCounter++;
                                 break;
                             }
                             
                             //increment existingTask tempDate by 1 week
-                            newCalendar.add(Calendar.DATE, 7);
+                            exCalendar.add(Calendar.DATE, 7);
                             exTempDate = exCalendar.getTime();
                         }
                         

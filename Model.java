@@ -275,15 +275,17 @@ public class Model
                     
                     //iterate through every instance of POSSIBLE NEW WEEKLY RecurringTask
                     while (newTempDate.compareTo(newTaskEndDate)<=0){
+                        System.out.println("newTempDate: "+newTempDate);
                         //iterate through every instace of POSSIBLE existing weekly RecurringTask
                         while(exTempDate.compareTo(existingTaskEndDate)<=0){
+                            System.out.println("ExTempDate: "+exTempDate);
                             if(newTempDate.compareTo(exTempDate)==0){
                                 dateOverlapCounter++;
                                 break;
                             }
                             
                             //increment existingTask tempDate by 1 week
-                            newCalendar.add(Calendar.DATE, 7);
+                            exCalendar.add(Calendar.DATE, 7);
                             exTempDate = exCalendar.getTime();
                         }
                         
